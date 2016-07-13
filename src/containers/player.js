@@ -11,9 +11,9 @@ class Player extends React.Component {
 
     this.state = {
       r: "20",
-      cx: 0,
-      cy: 0,
-      fill: "red"
+      cx: 20,
+      cy: 20,
+      fill: "blue"
     }
   }
 
@@ -25,7 +25,6 @@ class Player extends React.Component {
   }
 
   componentDidMount() {
-
     window.addEventListener('mousemove', (event) => {
       this.updatePosition(event.clientX, event.clientY);
     });
