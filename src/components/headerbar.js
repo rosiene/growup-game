@@ -1,5 +1,5 @@
 import React from 'react';
-import _ from 'lodash';
+
 
 class HeaderBar extends React.Component{
 
@@ -33,15 +33,16 @@ class HeaderBar extends React.Component{
   }
 
   render() {
+    console.log(this.props.player);
     return (
       <div style={this.baseStyle}>
         <div style={this.first}>Grow Up!</div>
         <div style={this.second}>Food Eaten:
-        <br/>{this.props.food_eaten}</div>
+        {this.props.player.food_eaten}</div>
         <div style={this.second}>Time Alive:
-        <br/>{this.props.time_alive}</div>
+        {this.props.player.time_alive}</div>
         <div style={this.second}>Speed:
-        <br/>{this.props.speed}</div>
+        {this.props.player.speed}</div>
       </div>
     );
   }

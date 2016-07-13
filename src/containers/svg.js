@@ -1,5 +1,6 @@
 import React from 'react';
 import Player from './player';
+import HeaderBar from '../components/headerbar';
 
 class Svg extends React.Component {
 
@@ -10,13 +11,21 @@ class Svg extends React.Component {
       top: 100,
     };
 
-
     this.svgstyle = {
       position: 'fixed',
       border: '1px solid red',
       top: 100,
     };
-
+    this.state = {
+      foods: [],
+      player: {r: "20",
+              cx: 20,
+              cy: 20,
+              fill: "blue",
+              food_eaten: "0",
+              time_alive: "0",
+              speed: "0"}
+    };
   }
 
   area(){
@@ -25,11 +34,15 @@ class Svg extends React.Component {
   }
 
   render(){
+    console.log(this.state.player);
     return(
-      <div style={this.style}>
-        <svg id="board"  style={this.svgstyle} width="1000" height="600">
-          <Player />
-        </svg>
+      <div>
+        <HeaderBar player={this.state.player} />
+        <div style={this.style}>
+          <svg id="board"  style={this.svgstyle} width="1000" height="600">
+            <Player />
+          </svg>
+        </div>
       </div>
     )
   }

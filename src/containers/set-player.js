@@ -5,7 +5,7 @@ class SetPlayer extends React.Component {
   render(){
     return (
       <div>
-      <h1>tralala<h1/>
+        <h1>tralala<h1/>
       </div>
     );
   }
