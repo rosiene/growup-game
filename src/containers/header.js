@@ -4,9 +4,9 @@ import HeaderBar from '../components/headerbar'
 class Header extends React.Component {
 
   render(){
-    return(
+    return (
       <div>
-        <HeaderBar/>
+      <HeaderBar/>
       </div>
     );
   }

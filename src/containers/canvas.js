@@ -7,7 +7,7 @@ class Canvas extends React.Component {
   this.style = {
     border: "1px solid #000",
     position: 'fixed',
-    top: 100,
+    top: 105,
     height: 600,
     width: 1000
   };

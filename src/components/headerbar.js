@@ -3,8 +3,8 @@ import _ from 'lodash';
 
 class HeaderBar extends React.Component{
 
-  constructor(props){
-    super(props);
+  constructor(){
+    super();
 
     this.baseStyle = _.merge({
       backgroundColor: "#9CCC65",
@@ -14,10 +14,9 @@ class HeaderBar extends React.Component{
       left: 0,
       right: 0,
       margin: 0,
-      padding: "5px 10px",
+      padding: "5px 5px",
       boxShadow: "1px 1px 5px rgba(0,0,0,0.3)",
-    }, props.style || {});
-
+    });
     this.first = ({
       float: "left",
       width: "400px",
@@ -29,7 +28,7 @@ class HeaderBar extends React.Component{
     });
   }
 
-  render(){
+  render() {
     return (
       <div style={this.baseStyle}>
         <div style={this.first}><h1>Grow Up!</h1></div>
@@ -42,7 +41,7 @@ class HeaderBar extends React.Component{
       </div>
     );
   }
-}
 
+}
 
 export default HeaderBar;
