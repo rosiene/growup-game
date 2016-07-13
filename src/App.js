@@ -1,11 +1,11 @@
 import React from 'react';
-import Canvas from './containers/canvas';
 import Food from './containers/food';
+import Svg from './containers/svg';
 
 class App extends React.Component {
     render() {
         return (
-            <Food />
+            <Svg />
         );
     }
 }
