@@ -10,6 +10,7 @@ class HeaderBar extends React.Component{
       backgroundColor: "#9CCC65",
       color: "#FAFAFA",
       position: "fixed",
+      height: 50,
       top: 0,
       left: 0,
       right: 0,
@@ -19,19 +20,22 @@ class HeaderBar extends React.Component{
     });
     this.first = ({
       float: "left",
-      width: "400px",
+      width: 400,
+      fontSize: 40,
+      fontWeight: 'bold',
     });
     this.second = ({
       float: "left",
-      width: "200px",
-      textAlign: 'center'
+      width: 200,
+      textAlign: 'center',
+      fontWeight: 'bold',
     });
   }
 
   render() {
     return (
       <div style={this.baseStyle}>
-        <div style={this.first}><h1>Grow Up!</h1></div>
+        <div style={this.first}>Grow Up!</div>
         <div style={this.second}>Food Eaten:
         <br/>{this.props.food_eaten}</div>
         <div style={this.second}>Time Alive:
