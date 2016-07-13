@@ -1,7 +1,23 @@
 import React from 'react';
-import Player from './Player';
+import Player from './player';
 
 class Svg extends React.Component {
+
+  constructor(){
+    super();
+
+    this.style = {
+      top: 100,
+    };
+
+
+    this.svgstyle = {
+      position: 'fixed',
+      border: '1px solid red',
+      top: 100,
+    };
+
+  }
 
   area(){
     var canvas = document.getElementById("board");
@@ -10,9 +26,11 @@ class Svg extends React.Component {
 
   render(){
     return(
-      <svg id="board" style={{border: "1px solid #000"}} id="board" width="1000px" height="600px">
-        <Player />
-      </svg>
+      <div style={this.style}>
+        <svg id="board"  style={this.svgstyle} width="1000" height="600">
+          <Player />
+        </svg>
+      </div>
     )
   }
 }
