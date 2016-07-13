@@ -1,6 +1,17 @@
 import React from 'react';
 
 class Canvas extends React.Component {
+  constructor() {
+  super();
+
+  this.style = {
+    border: "1px solid #000",
+    position: 'fixed',
+    top: 100,
+    height: 600,
+    width: 1000
+  };
+}
 
   area(){
     var canvas = document.getElementById("board");
@@ -9,7 +20,7 @@ class Canvas extends React.Component {
 
   render(){
     return(
-      <canvas style={{border: "1px solid #000"}} id="board" width="1000px" height="600px" />
+      <canvas style={this.style} id="board" />
     )
   }
 }

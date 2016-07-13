@@ -18,11 +18,6 @@ class HeaderBar extends React.Component{
       padding: "5px 10px",
       boxShadow: "1px 1px 5px rgba(0,0,0,0.3)",
     }, props.style || {});
-
-
-    this.headerStyle = _.merge({
-      color: "#fff",
-    }, this.props.headerStyle || {});
   }
 
   render(){
