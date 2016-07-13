@@ -6,7 +6,7 @@ class HeaderBar extends React.Component{
   constructor(){
     super();
 
-    this.baseStyle = _.merge({
+    this.baseStyle = ({
       backgroundColor: "#9CCC65",
       color: "#FAFAFA",
       position: "fixed",

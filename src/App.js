@@ -1,13 +1,13 @@
 import React from 'react';
-import Canvas from './containers/canvas';
 import Header from './containers/header';
+import Svg from './containers/svg';
 
 class App extends React.Component {
     render() {
         return (
           <div>
             <Header />
-            <Canvas />
+            <Svg />
           </div>
         );
     }
