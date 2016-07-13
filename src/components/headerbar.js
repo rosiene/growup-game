@@ -9,7 +9,6 @@ class HeaderBar extends React.Component{
     this.baseStyle = _.merge({
       backgroundColor: "#9CCC65",
       color: "#FAFAFA",
-      textAlign:'center',
       position: "fixed",
       top: 0,
       left: 0,
@@ -18,12 +17,28 @@ class HeaderBar extends React.Component{
       padding: "5px 10px",
       boxShadow: "1px 1px 5px rgba(0,0,0,0.3)",
     }, props.style || {});
+
+    this.first = ({
+      float: "left",
+      width: "400px",
+    });
+    this.second = ({
+      float: "left",
+      width: "200px",
+      textAlign: 'center'
+    });
   }
 
   render(){
     return (
       <div style={this.baseStyle}>
-        <h1>Grow Up!</h1>
+        <div style={this.first}><h1>Grow Up!</h1></div>
+        <div style={this.second}>Food Eaten:
+        <br/>50</div>
+        <div style={this.second}>Time Alive:
+        <br/>50</div>
+        <div style={this.second}>Speed:
+        <br/>50</div>
       </div>
     );
   }
