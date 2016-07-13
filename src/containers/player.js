@@ -20,7 +20,7 @@ class Player extends React.Component {
   updatePosition(x, y){
     this.setState({
       cx: x,
-      cy: y
+      cy: y - 100
     })
   }
 
