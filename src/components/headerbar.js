@@ -33,11 +33,11 @@ class HeaderBar extends React.Component{
       <div style={this.baseStyle}>
         <div style={this.first}><h1>Grow Up!</h1></div>
         <div style={this.second}>Food Eaten:
-        <br/>50</div>
+        <br/>{this.props.food_eaten}</div>
         <div style={this.second}>Time Alive:
-        <br/>50</div>
+        <br/>{this.props.time_alive}</div>
         <div style={this.second}>Speed:
-        <br/>50</div>
+        <br/>{this.props.speed}</div>
       </div>
     );
   }
