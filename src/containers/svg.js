@@ -16,29 +16,54 @@ class Svg extends React.Component {
       border: '1px solid red',
       top: 100,
     };
+
+    this.state = {
+      foods: [],
+      player: {r: "20", cx: 20, cy: 20, fill: "blue"}
+    }
   }
 
-  foods(){
-    let foods = [];
+  updatePositionPlayer(x, y){
+    this.setState({
+      player: {
+        r: "20",
+        cx: x,
+        cy: y - 100,
+        fill: "blue"
+      }
+    })
+    console.log(this.state.player);
+  }
+
+  componentDidMount() {
+    window.addEventListener('mousemove', (event) => {
+      this.updatePositionPlayer(event.clientX, event.clientY);
+    });
+    this.createFoods();
+  }
+
+  createFoods(){
+    let tempFoods = [];
     for (let i = 0; i < 100; i++){
       let x = Math.floor(Math.random() * 990);
       let y = Math.floor(Math.random() * 590);
-      foods.push({x: x, y: y});
+      tempFoods.push({x: x, y: y});
     }
-    return foods;
+    this.setState({
+      foods: tempFoods
+    });
   }
 
   renderFood(food, index){
-    return (<Food key={index}
-            cx={food.x} cy={food.y} />);
+    return (<Food key={index} cx={food.x} cy={food.y} />);
   }
 
   render() {
     return(
       <div style={this.style}>
         <svg id="board"  style={this.svgstyle} width="1000" height="600">
-          { this.foods().map(this.renderFood) }
-          <Player />
+          { this.state.foods.map(this.renderFood) }
+          <Player player={this.state.player}/>
         </svg>
       </div>
     );
