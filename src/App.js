@@ -1,10 +1,10 @@
 import React from 'react';
-import Canvas from './containers/canvas'
+import Svg from './containers/svg';
 
 class App extends React.Component {
     render() {
         return (
-            <Canvas />
+            <Svg />
         );
     }
 }
