@@ -25,31 +25,59 @@ class Svg extends React.Component {
         r: "20",
         cx: 20,
         cy: 20,
+        nx: 20,
+        ny: 20,
         fill: "blue",
         name: "Username",
         food_eaten: 0,
         time_alive: "00:00:00",
-        speed: 0,
+        delay: 5
       }
     };
   }
 
-  updateGame(x, y){
-    let ate = this.eatFood(x, y);
-    ate = ate + parseInt(this.state.player.food_eaten);
+  updateGame(){
+    setTimeout(() => {
 
-    this.setState({
-      player: {
-        r: this.playerGrow(ate),
-        cx: x,
-        cy: y - 70,
-        fill: "blue",
-        name: "Username",
-        food_eaten: ate,
-        time_alive: this.state.player.time_alive,
-        speed: 0
-      }
-    });
+      let ate = this.eatFood(this.state.player.nx, this.state.player.ny);
+      ate = ate + parseInt(this.state.player.food_eaten);
+
+      let delay = parseInt(this.state.player.delay);
+
+      this.setState({
+        player: {
+          r: this.playerGrow(ate),
+          cx: this.playerDelay(delay, ate)[0],
+          cy: this.playerDelay(delay, ate)[1],
+          nx: this.state.player.nx,
+          ny: this.state.player.ny,
+          fill: "blue",
+          name: "Username",
+          food_eaten: ate,
+          time_alive: this.state.player.time_alive,
+          speed: 0,
+          delay: this.playerDelay(delay, ate)[2]
+        }
+      });
+      this.updateGame();
+    }, 10);
+  }
+
+  playerDelay(delay, ate){
+
+    delay = 5 + (ate/5);
+
+    let nX = parseInt(this.state.player.nx);
+    let nY = parseInt(this.state.player.ny);
+    let cX = parseInt(this.state.player.cx);
+    let cY = parseInt(this.state.player.cy);
+
+    let arr = [];
+    arr.push(cX + ((nX-cX)/delay));
+    arr.push(cY + ((nY-cY)/delay));
+    arr.push(delay);
+
+    return arr;
   }
 
   updateTime(time){
@@ -126,11 +154,21 @@ class Svg extends React.Component {
     return ate;
   }
 
+  updatePosition(x,y){
+    let tempPlayer = this.state.player;
+    tempPlayer.nx = x;
+    tempPlayer.ny = y;
+    this.setState({
+      player: tempPlayer
+    });
+  }
+
   componentDidMount() {
     this.updateTime(0);
+    this.updateGame();
     this.createFoods();
     window.addEventListener('mousemove', (event) => {
-      this.updateGame(event.clientX, event.clientY);
+      this.updatePosition(event.clientX, event.clientY);
     });
   }
 
@@ -161,7 +199,7 @@ class Svg extends React.Component {
   }
 
   newFood(color){
-    let x = Math.floor(Math.random() * 990);
+    let x = Math.floor(Math.random() * 1090);
     let y = Math.floor(Math.random() * 590);
     return {cx: x, cy: y, r:"6", fill:color };
   }
@@ -175,7 +213,7 @@ class Svg extends React.Component {
     <div>
       <Header player={this.state.player} />
       <div style={this.style}>
-        <svg id="board"  style={this.svgstyle} width="1000" height="600">
+        <svg id="board"  style={this.svgstyle} width="1100" height="600">
           { this.state.foods.map(this.renderFood) }
           <Player player={this.state.player} />
         </svg>

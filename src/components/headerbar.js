@@ -52,7 +52,7 @@ class HeaderBar extends React.Component{
           Time Alive: {this.props.time_alive}
         </div>
         <div style={this.second}>
-          Speed: {this.props.speed}
+          Delay: {this.props.delay}
         </div>
       </div>
     );
