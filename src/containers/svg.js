@@ -40,7 +40,7 @@ class Svg extends React.Component {
 
     this.setState({
       player: {
-        r: "20",
+        r: this.playerGrow(ate),
         cx: x,
         cy: y - 70,
         fill: "blue",
@@ -50,6 +50,17 @@ class Svg extends React.Component {
         speed: 0
       }
     });
+  }
+
+  playerGrow(eatFood){
+    let size = parseInt(this.state.player.r);
+    let newSize = 20 + (eatFood/5);
+    
+    if (size > newSize) {
+      return size;
+    } else {
+      return newSize;
+    }
   }
 
   eatFood(x, y){
@@ -130,15 +141,6 @@ class Svg extends React.Component {
   renderFood(food, index){
     return (<Food key={index} cx={food.cx} cy={food.cy} r={food.r} fill={food.fill} />);
   }
-
-  playerGrow(x, y){
-    let ctx = document.getElementById('player').getContext('2d');
-    scale = scale + parseInt(this.state.player);
-
-      for (i = 0; i < 100; i++) {
-
-  }
-}
 
   render(){
     return(
