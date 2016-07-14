@@ -1,6 +1,6 @@
 import React from 'react';
 import Player from './player';
-import HeaderBar from '../components/headerbar';
+import Header from './header';
 import Food from './food';
 
 
@@ -21,13 +21,16 @@ class Svg extends React.Component {
 
     this.state = {
       foods: [],
-      player: {r: "20",
-              cx: 20,
-              cy: 20,
-              fill: "blue",
-              food_eaten: "0",
-              time_alive: "0",
-              speed: "0"}
+      player: {
+        r: "20",
+        cx: 20,
+        cy: 20,
+        fill: "blue",
+        name: "Username",
+        food_eaten: 0,
+        time_alive: 0,
+        speed: 0
+      }
     };
   }
 
@@ -37,10 +40,13 @@ class Svg extends React.Component {
         r: "20",
         cx: x,
         cy: y - 100,
-        fill: "blue"
+        fill: "blue",
+        name: "Username",
+        food_eaten: 0,
+        time_alive: 0,
+        speed: 0
       }
-    })
-    console.log(this.state.player);
+    });
   }
 
   componentDidMount() {
@@ -69,19 +75,16 @@ class Svg extends React.Component {
 
 
   render(){
-    console.log(this.state.player);
-
     return(
     <div>
-      <HeaderBar player={this.state.player} />
+      <Header player={this.state.player} />
       <div style={this.style}>
-
         <svg id="board"  style={this.svgstyle} width="1000" height="600">
           { this.state.foods.map(this.renderFood) }
-          <Player player={this.state.player}/>
+          <Player player={this.state.player} />
         </svg>
-        </div>
       </div>
+    </div>
     );
   }
 }
