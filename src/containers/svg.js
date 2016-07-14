@@ -1,6 +1,8 @@
 import React from 'react';
 import Player from './player';
+import Header from './header';
 import Food from './food';
+
 
 class Svg extends React.Component {
 
@@ -19,8 +21,17 @@ class Svg extends React.Component {
 
     this.state = {
       foods: [],
-      player: {r: "20", cx: 20, cy: 20, fill: "blue"}
-    }
+      player: {
+        r: "20",
+        cx: 20,
+        cy: 20,
+        fill: "blue",
+        name: "Username",
+        food_eaten: 0,
+        time_alive: 0,
+        speed: 0
+      }
+    };
   }
 
   updatePositionPlayer(x, y){
@@ -29,10 +40,13 @@ class Svg extends React.Component {
         r: "20",
         cx: x,
         cy: y - 100,
-        fill: "blue"
+        fill: "blue",
+        name: "Username",
+        food_eaten: 0,
+        time_alive: 0,
+        speed: 0
       }
-    })
-    console.log(this.state.player);
+    });
   }
 
   componentDidMount() {
@@ -52,20 +66,25 @@ class Svg extends React.Component {
     this.setState({
       foods: tempFoods
     });
+
   }
 
   renderFood(food, index){
     return (<Food key={index} cx={food.x} cy={food.y} />);
   }
 
-  render() {
+
+  render(){
     return(
+    <div>
+      <Header player={this.state.player} />
       <div style={this.style}>
         <svg id="board"  style={this.svgstyle} width="1000" height="600">
           { this.state.foods.map(this.renderFood) }
-          <Player player={this.state.player}/>
+          <Player player={this.state.player} />
         </svg>
       </div>
+    </div>
     );
   }
 }

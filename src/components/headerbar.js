@@ -1,5 +1,5 @@
 import React from 'react';
-import _ from 'lodash';
+
 
 class HeaderBar extends React.Component{
 
@@ -10,6 +10,7 @@ class HeaderBar extends React.Component{
       backgroundColor: "#9CCC65",
       color: "#FAFAFA",
       position: "fixed",
+      height: 50,
       top: 0,
       left: 0,
       right: 0,
@@ -17,27 +18,42 @@ class HeaderBar extends React.Component{
       padding: "5px 5px",
       boxShadow: "1px 1px 5px rgba(0,0,0,0.3)",
     });
+
     this.first = ({
       float: "left",
-      width: "400px",
+      width: 300,
+      fontSize: 30,
+      fontWeight: "bold",
+      lineHeight: "50px"
     });
+
     this.second = ({
+      padding: "10px",
       float: "left",
-      width: "200px",
-      textAlign: 'center'
+      width: 200,
+      textAlign: "center",
+      fontWeight: "bold"
     });
   }
 
   render() {
     return (
       <div style={this.baseStyle}>
-        <div style={this.first}><h1>Grow Up!</h1></div>
-        <div style={this.second}>Food Eaten:
-        <br/>50</div>
-        <div style={this.second}>Time Alive:
-        <br/>50</div>
-        <div style={this.second}>Speed:
-        <br/>50</div>
+        <div style={this.first}>
+          Grow Up!
+        </div>
+        <div style={this.second}>
+          Player: {this.props.name}
+        </div>
+        <div style={this.second}>
+          Food Eaten: {this.props.food_eaten}
+        </div>
+        <div style={this.second}>
+          Time Alive: {this.props.time_alive}
+        </div>
+        <div style={this.second}>
+          Speed: {this.props.speed}
+        </div>
       </div>
     );
   }
