@@ -1,7 +1,9 @@
 import React from 'react';
+import Utils from '../lib/Utils';
 import Player from './player';
 import Header from './header';
 import Food from './food';
+import SetPlayer from './set-player';
 
 
 class Svg extends React.Component {
@@ -9,14 +11,18 @@ class Svg extends React.Component {
   constructor(){
     super();
 
+    this.utils = new Utils();
+
+    let name = this.utils.store("game.player");
+
     this.style = {
-      top: 70,
+      paddingTop: 60,
     };
 
     this.svgstyle = {
       position: 'fixed',
       border: '1px solid red',
-      top: 70,
+      top: 120,
     };
 
     this.state = {
@@ -27,8 +33,8 @@ class Svg extends React.Component {
         cy: 20,
         nx: 20,
         ny: 20,
-        fill: "blue",
-        name: "Username",
+        fill: "",
+        name: "",
         food_eaten: 0,
         time_alive: "00:00:00",
         delay: 5
@@ -51,8 +57,8 @@ class Svg extends React.Component {
           cy: this.playerDelay(delay, ate)[1],
           nx: this.state.player.nx,
           ny: this.state.player.ny,
-          fill: "blue",
-          name: "Username",
+          fill: this.state.player.fill,
+          name: this.state.player.name,
           food_eaten: ate,
           time_alive: this.state.player.time_alive,
           speed: 0,
@@ -140,7 +146,6 @@ class Svg extends React.Component {
           startYPlayer < startYFood &&
           endXPlayer > endXFood &&
           endYPlayer > endYFood){
-        //console.log(food);
         ate = ate + 1;
         this.loadNewFood();
 
@@ -163,7 +168,7 @@ class Svg extends React.Component {
     });
   }
 
-  componentDidMount() {
+  startGame() {
     this.updateTime(0);
     this.updateGame();
     this.createFoods();
@@ -182,9 +187,6 @@ class Svg extends React.Component {
       });
 
     }, 500);
-
-    console.log("oi");
-    console.log(this.state.foods);
   }
 
   createFoods(){
@@ -204,6 +206,21 @@ class Svg extends React.Component {
     return {cx: x, cy: y, r:"6", fill:color };
   }
 
+
+  setPlayer(name, color) {
+    this.utils.store("game.player", name);
+    this.utils.store("game.color", color);
+
+    let tempPlayer = this.state.player;
+    tempPlayer.name = name;
+    tempPlayer.fill = color;
+    this.setState({
+      player: tempPlayer
+    });
+
+    this.startGame();
+  }
+
   renderFood(food, index){
     return (<Food key={index} cx={food.cx} cy={food.cy} r={food.r} fill={food.fill} />);
   }
@@ -213,6 +230,9 @@ class Svg extends React.Component {
     <div>
       <Header player={this.state.player} />
       <div style={this.style}>
+        <SetPlayer
+            username={ this.state.player.name }
+            onChange={ this.setPlayer.bind(this) } />
         <svg id="board"  style={this.svgstyle} width="1100" height="600">
           { this.state.foods.map(this.renderFood) }
           <Player player={this.state.player} />
