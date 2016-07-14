@@ -10,7 +10,7 @@ class Header extends React.Component {
           name={this.props.player.name}
           food_eaten={this.props.player.food_eaten}
           time_alive={this.props.player.time_alive}
-          speed={this.props.player.speed}
+          delay={this.props.player.delay}
            />
       </div>
     );
