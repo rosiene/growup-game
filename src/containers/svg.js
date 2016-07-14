@@ -28,7 +28,7 @@ class Svg extends React.Component {
         fill: "blue",
         name: "Username",
         food_eaten: 0,
-        time_alive: 0,
+        time_alive: "00:00:00",
         speed: 0,
       }
     };
@@ -46,16 +46,43 @@ class Svg extends React.Component {
         fill: "blue",
         name: "Username",
         food_eaten: ate,
-        time_alive: 0,
+        time_alive: this.state.player.time_alive,
         speed: 0
       }
     });
   }
 
+  updateTime(time){
+    setTimeout(() => {
+      time = time + 1;
+
+      let tempPlayer = this.state.player;
+      tempPlayer.time_alive = this.setFormatTime(time);
+
+      this.setState({
+        player: tempPlayer
+      })
+
+      this.updateTime(time);
+    }, 1000);
+  }
+
+  setFormatTime(time){
+    var hours   = Math.floor(time / 3600);
+    var minutes = Math.floor((time - (hours * 3600)) / 60);
+    var seconds = time - (hours * 3600) - (minutes * 60);
+
+    if (hours   < 10) {hours   = "0"+hours;}
+    if (minutes < 10) {minutes = "0"+minutes;}
+    if (seconds < 10) {seconds = "0"+seconds;}
+
+    return hours+':'+minutes+':'+seconds;
+  }
+
   playerGrow(eatFood){
     let size = parseInt(this.state.player.r);
     let newSize = 20 + (eatFood/5);
-    
+
     if (size > newSize) {
       return size;
     } else {
@@ -100,6 +127,7 @@ class Svg extends React.Component {
   }
 
   componentDidMount() {
+    this.updateTime(0);
     this.createFoods();
     window.addEventListener('mousemove', (event) => {
       this.updateGame(event.clientX, event.clientY);
