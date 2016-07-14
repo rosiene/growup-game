@@ -33,7 +33,7 @@ class Svg extends React.Component {
         cy: 20,
         nx: 20,
         ny: 20,
-        fill: "",
+        fill: "white",
         name: "",
         food_eaten: 0,
         time_alive: "00:00:00",
@@ -202,7 +202,7 @@ class Svg extends React.Component {
 
   newFood(color){
     let x = Math.floor(Math.random() * 1090);
-    let y = Math.floor(Math.random() * 590);
+    let y = Math.floor(Math.random() * 560);
     return {cx: x, cy: y, r:"6", fill:color };
   }
 
@@ -233,7 +233,7 @@ class Svg extends React.Component {
         <SetPlayer
             username={ this.state.player.name }
             onChange={ this.setPlayer.bind(this) } />
-        <svg id="board"  style={this.svgstyle} width="1100" height="600">
+        <svg id="board"  style={this.svgstyle} width="1100" height="570">
           { this.state.foods.map(this.renderFood) }
           <Player player={this.state.player} />
         </svg>
