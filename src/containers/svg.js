@@ -29,7 +29,7 @@ class Svg extends React.Component {
         name: "Username",
         food_eaten: 0,
         time_alive: 0,
-        speed: 0
+        speed: 0,
       }
     };
   }
@@ -73,6 +73,14 @@ class Svg extends React.Component {
     return (<Food key={index} cx={food.x} cy={food.y} />);
   }
 
+  playerGrow(x, y){
+    let ctx = document.getElementById('player').getContext('2d');
+    scale = scale + parseInt(this.state.player);
+
+      for (i = 0; i < 100; i++) {
+
+  }
+}
 
   render(){
     return(
