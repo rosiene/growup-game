@@ -55,6 +55,9 @@ class SetPlayer extends React.Component {
           <CardHeader style={cardTitleStyle}>
             Grow Up!
           </CardHeader>
+          <CardText style={cardTextStyle}>
+            Control your cell and eat other players to grow larger!
+          </CardText>
           <div style={cardTextStyle}>
           <form onSubmit={ this.onSubmit.bind(this) }>
             <TextField floatingLabelText="What is your nickname?" ref="newPlayer"/>
