@@ -4,6 +4,8 @@ import Player from './player';
 import Header from './header';
 import Food from './food';
 import SetPlayer from './set-player';
+import FoodModel from '../models/FoodModel';
+import PlayerModel from '../models/PlayerModel';
 
 
 class Svg extends React.Component {
@@ -12,8 +14,6 @@ class Svg extends React.Component {
     super();
 
     this.utils = new Utils();
-
-    let name = this.utils.store("game.player");
 
     this.style = {
       paddingTop: 60,
@@ -27,46 +27,164 @@ class Svg extends React.Component {
 
     this.state = {
       foods: [],
-      player: {
-        r: "20",
+      players: [],
+      game: false
+    };
+
+    this.modelFood = new FoodModel();
+    this.modelFood.subscribe(this.updateFood.bind(this));
+
+    this.modelPlayer = new FoodModel();
+    this.modelPlayer.subscribe(this.updatePlayer.bind(this));
+  }
+
+  updateFood(){
+    this.setState({
+      foods: this.modelFood.resources
+    });
+  }
+
+  updatePlayer(){
+    this.setState({
+      players: this.modelPlayer.resources
+    });
+  }
+
+  setPlayer(name, fill) {
+    console.log("setPlayer");
+
+    let player = this.newPlayer(name, fill);
+
+    this.utils.store("player.player", player.name);
+    this.utils.store("player.r", player.r);
+    this.utils.store("player.cx", player.cx);
+    this.utils.store("player.cy", player.cy);
+    this.utils.store("player.nx", player.nx);
+    this.utils.store("player.ny", player.ny);
+    this.utils.store("player.fill", player.fill);
+    this.utils.store("player.food_eaten", player.food_eaten);
+    this.utils.store("player.time_alive", player.time_alive);
+    this.utils.store("player.delay", player.delay);
+    this.utils.store("player.ranking", player.ranking);
+    this.utils.store("player.stroke", player.stroke);
+    this.utils.store("player.stroke_width", player.stroke_width);
+
+    let tempPlayers = []
+    if (this.state.players){
+      tempPlayers = this.state.players;
+    }
+    tempPlayers.push(player);
+
+    this.setState({
+      players: tempPlayers
+    });
+
+    this.setState({
+        game: true
+    })
+
+    this.startGame();
+  }
+
+  newPlayer(name, fill){
+    console.log("newPlayer");
+
+    return {
+        name: name,
+        r: 20,
         cx: 20,
         cy: 20,
         nx: 20,
         ny: 20,
-        fill: "white",
-        name: "",
+        fill: fill,
         food_eaten: 0,
         time_alive: "00:00:00",
-        delay: 5
-      }
-    };
+        delay: 5,
+        ranking: 0,
+        stroke: "#ccc",
+        stroke_width: 2
+    }
+  }
+
+  startGame() {
+    console.log("startGame");
+
+    this.createFoods();
+    this.playGame();
+  }
+
+  playGame(){
+    console.log("playGame");
+
+    let lost = false;
+
+    while(!lost){
+      this.updateTime();
+      //this.updateGame();
+      //window.addEventListener('mousemove', (event) => {
+      //  this.updatePosition(event.clientX, event.clientY);
+      //});
+    }
+  }
+
+  createFoods(){
+    console.log("createFoods");
+    let tempFoods = []
+
+    for (let i = 0; i < 100; i++){
+      tempFoods.push(this.setFood("red"));
+    }
+    this.setState({
+      foods: tempFoods
+    })
+  }
+
+  setFood(color){
+    let x = Math.floor(Math.random() * 1090);
+    let y = Math.floor(Math.random() * 560);
+    let food = {cx: x, cy: y, r:6, fill:color };
+
+    this.utils.store("food.cx", food.cx);
+    this.utils.store("food.cx", food.cy);
+    this.utils.store("food.r", food.r);
+    this.utils.store("food.fill", food.fill);
+
+    return food;
   }
 
   updateGame(){
-    setTimeout(() => {
 
-      let ate = this.eatFood(this.state.player.nx, this.state.player.ny);
-      ate = ate + parseInt(this.state.player.food_eaten);
+    let ate = this.eatFood(this.state.player.nx, this.state.player.ny);
+    ate = ate + parseInt(this.state.player.food_eaten);
 
-      let delay = parseInt(this.state.player.delay);
+    let delay = parseInt(this.state.player.delay);
 
-      this.setState({
-        player: {
-          r: this.playerGrow(ate),
-          cx: this.playerDelay(delay, ate)[0],
-          cy: this.playerDelay(delay, ate)[1],
-          nx: this.state.player.nx,
-          ny: this.state.player.ny,
-          fill: this.state.player.fill,
-          name: this.state.player.name,
-          food_eaten: ate,
-          time_alive: this.state.player.time_alive,
-          speed: 0,
-          delay: this.playerDelay(delay, ate)[2]
-        }
-      });
-      this.updateGame();
-    }, 10);
+    this.setState({
+      player: {
+        r: this.playerGrow(ate),
+        cx: this.playerDelay(delay, ate)[0],
+        cy: this.playerDelay(delay, ate)[1],
+        nx: this.state.player.nx,
+        ny: this.state.player.ny,
+        fill: this.state.player.fill,
+        name: this.state.player.name,
+        food_eaten: ate,
+        time_alive: this.state.player.time_alive,
+        speed: 0,
+        delay: this.playerDelay(delay, ate)[2]
+      }
+    });
+  }
+
+  playerGrow(eatFood){
+    let size = parseInt(this.state.player.r);
+    let newSize = 20 + (eatFood/5);
+
+    if (size > newSize) {
+      return size;
+    } else {
+      return newSize;
+    }
   }
 
   playerDelay(delay, ate){
@@ -86,19 +204,10 @@ class Svg extends React.Component {
     return arr;
   }
 
-  updateTime(time){
-    setTimeout(() => {
-      time = time + 1;
-
-      let tempPlayer = this.state.player;
-      tempPlayer.time_alive = this.setFormatTime(time);
-
-      this.setState({
-        player: tempPlayer
-      })
-
-      this.updateTime(time);
-    }, 1000);
+  updateTime(){
+    this.state.players.map(function(player){
+      player.time_alive = player.time_alive + 1;
+    })
   }
 
   setFormatTime(time){
@@ -111,17 +220,6 @@ class Svg extends React.Component {
     if (seconds < 10) {seconds = "0"+seconds;}
 
     return hours+':'+minutes+':'+seconds;
-  }
-
-  playerGrow(eatFood){
-    let size = parseInt(this.state.player.r);
-    let newSize = 20 + (eatFood/5);
-
-    if (size > newSize) {
-      return size;
-    } else {
-      return newSize;
-    }
   }
 
   eatFood(x, y){
@@ -168,14 +266,6 @@ class Svg extends React.Component {
     });
   }
 
-  startGame() {
-    this.updateTime(0);
-    this.updateGame();
-    this.createFoods();
-    window.addEventListener('mousemove', (event) => {
-      this.updatePosition(event.clientX, event.clientY);
-    });
-  }
 
   loadNewFood(){
     setTimeout(() => {
@@ -189,57 +279,40 @@ class Svg extends React.Component {
     }, 500);
   }
 
-  createFoods(){
-    let tempFoods = [];
-    for (let i = 0; i < 100; i++){
-      tempFoods.push(this.newFood("red"));
-    }
-    this.setState({
-      foods: tempFoods
-    });
-
-  }
-
-  newFood(color){
-    let x = Math.floor(Math.random() * 1090);
-    let y = Math.floor(Math.random() * 560);
-    return {cx: x, cy: y, r:"6", fill:color };
-  }
-
-
-  setPlayer(name, color) {
-    this.utils.store("game.player", name);
-    this.utils.store("game.color", color);
-
-    let tempPlayer = this.state.player;
-    tempPlayer.name = name;
-    tempPlayer.fill = color;
-    this.setState({
-      player: tempPlayer
-    });
-
-    this.startGame();
-  }
-
   renderFood(food, index){
     return (<Food key={index} cx={food.cx} cy={food.cy} r={food.r} fill={food.fill} />);
   }
 
-  render(){
-    return(
-    <div>
-      <Header player={this.state.player} />
-      <div style={this.style}>
-        <SetPlayer
-            username={ this.state.player.name }
-            onChange={ this.setPlayer.bind(this) } />
-        <svg id="board"  style={this.svgstyle} width="1100" height="570">
-          { this.state.foods.map(this.renderFood) }
-          <Player player={this.state.player} />
-        </svg>
+  renderPlayer(player, index){
+    return (<Player key={index} cx={player.cx} cy={player.cy} r={player.r} fill={player.fill} />);
+  }
+
+  renderSvg(){
+    return (
+      <div>
+        <div style={this.style}>
+          <svg id="board"  style={this.svgstyle} width="1100" height="570">
+            { this.state.foods.map(this.renderFood) }
+            { this.state.players.map(this.renderPlayer) }
+          </svg>
+        </div>
       </div>
-    </div>
     );
+  }
+
+  renderSetPlayer(){
+    return (
+      <SetPlayer onChange={ this.setPlayer.bind(this) } />
+    );
+  }
+
+  render(){
+    console.log(this.state.game);
+    if (!this.state.game){
+      return this.renderSetPlayer();
+    }else{
+      return this.renderSvg();
+    }
   }
 }
 
