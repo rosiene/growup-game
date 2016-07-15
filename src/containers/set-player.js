@@ -1,10 +1,39 @@
 import React from 'react';
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 
 const style = {
+  marginTop: 50,
   margin: 12,
+  display: 'flex',
+  justifyContent: 'center'
+
 };
+
+const cardStyle = {
+  width: 500,
+};
+
+const cardTitleStyle = {
+  backgroundColor: "lightBlue",
+  fontSize: 30,
+  fontWeight: "bold",
+  paddingLeft: 80,
+};
+
+const cardTextStyle = {
+  display: 'flex',
+  justifyContent: 'center'
+};
+
+const styleButton = {
+  marginTop: 50,
+  margin: 12,
+  justifyContent: 'center',
+  width: 225
+};
+
 
 class SetPlayer extends React.Component {
 
@@ -21,16 +50,21 @@ class SetPlayer extends React.Component {
 
   renderUserForm() {
     return (
-      <div>
-        <form onSubmit={ this.onSubmit.bind(this) }>
-          <TextField floatingLabelText="What is your nickname?" ref="newPlayer"/>
-          <br/>
-          <TextField floatingLabelText="Color?" ref="color"/>
-          <br/>
-          <RaisedButton label="Start" primary={true} style={style} type="submit"/>
-
-
-        </form>
+      <div style={style}>
+        <Card style={cardStyle}>
+          <CardHeader style={cardTitleStyle}>
+            Grow Up!
+          </CardHeader>
+          <div style={cardTextStyle}>
+          <form onSubmit={ this.onSubmit.bind(this) }>
+            <TextField floatingLabelText="What is your nickname?" ref="newPlayer"/>
+            <br/>
+            <TextField floatingLabelText="Color?" ref="color"/>
+            <br/>
+            <RaisedButton label="Start"   backgroundColor="lightBlue" style={styleButton} type="submit"/>
+          </form>
+          </div>
+        </Card>
       </div>
     );
   }
