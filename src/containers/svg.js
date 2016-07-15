@@ -37,7 +37,7 @@ class Svg extends React.Component {
     this.modelFood = new FoodModel();
     this.modelFood.subscribe(this.updateFood.bind(this));
 
-    this.modelPlayer = new FoodModel();
+    this.modelPlayer = new PlayerModel();
     this.modelPlayer.subscribe(this.updatePlayer.bind(this));
   }
 
@@ -59,20 +59,23 @@ class Svg extends React.Component {
     let player = this.newPlayer(name, fill);
 
     this.modelPlayer.addResource({
-      name: player.name
-      // r: player.r,
-      // cx: player.cx,
-      // cy: player.cy,
-      // nx: player.nx,
-      // ny: player.ny,
-      // fill: player.fill,
-      // food_eaten: player.food_eaten,
-      // time_alive: player.time_alive,
-      // delay: player.delay,
-      // ranking: player.ranking,
-      // stroke: player.stroke,
-      // stroke_width: player.stroke_width
+      name: player.name,
+      r: player.r,
+      cx: player.cx,
+      cy: player.cy,
+      nx: player.nx,
+      ny: player.ny,
+      fill: player.fill,
+      food_eaten: player.food_eaten,
+      time_alive: player.time_alive,
+      delay: player.delay,
+      ranking: player.ranking,
+      stroke: player.stroke,
+      stroke_width: player.stroke_width
     });
+
+    this.updatePlayer();
+    console.log(player);
 
     this.setState({
         game: true
@@ -115,13 +118,13 @@ class Svg extends React.Component {
 
     let lost = false;
 
-    while(!lost){
-      this.updateTime();
+    //while(!lost){
+      //this.updateTime();
       //this.updateGame();
       //window.addEventListener('mousemove', (event) => {
       //  this.updatePosition(event.clientX, event.clientY);
       //});
-    }
+    //}
   }
 
   createFoods(){
@@ -147,6 +150,7 @@ class Svg extends React.Component {
       cy: food.cy,
       fill: food.fill
     })
+    this.updateFood();
 
     return food;
   }
@@ -203,11 +207,11 @@ class Svg extends React.Component {
     return arr;
   }
 
-  updateTime(){
-    this.state.players.map(function(player){
-      player.time_alive = player.time_alive + 1;
-    })
-  }
+  // updateTime(){
+  //   this.state.players.map(function(player){
+  //     player.time_alive = player.time_alive + 1;
+  //   })
+  // }
 
   setFormatTime(time){
     var hours   = Math.floor(time / 3600);
@@ -289,12 +293,12 @@ class Svg extends React.Component {
 
   renderSvg(){
     //<Header player={this.state.player} />
+    // { this.state.players.map(this.renderPlayer) }
     return (
       <div>
         <div style={this.style}>
           <svg id="board"  style={this.svgstyle} width="1000" height="650">
             { this.state.foods.map(this.renderFood) }
-            { this.state.players.map(this.renderPlayer) }
           </svg>
         </div>
       </div>
@@ -309,7 +313,6 @@ class Svg extends React.Component {
 
 
   render(){
-    console.log(this.state.game);
     if (!this.state.game){
       return this.renderSetPlayer();
     }else{
