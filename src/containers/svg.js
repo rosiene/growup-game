@@ -54,7 +54,6 @@ class Svg extends React.Component {
   }
 
   setPlayer(name, fill) {
-    console.log("setPlayer");
 
     let player = this.newPlayer(name, fill);
 
@@ -75,8 +74,6 @@ class Svg extends React.Component {
     });
     this.updatePlayer();
 
-    console.log(this.state.players);
-
     this.setState({
         game: true
     });
@@ -85,7 +82,6 @@ class Svg extends React.Component {
   }
 
   newPlayer(name, fill){
-    console.log("newPlayer");
 
     return {
         name: name,
@@ -107,14 +103,11 @@ class Svg extends React.Component {
 
 
   startGame() {
-    console.log("startGame");
-
     this.createFoods();
     this.playGame();
   }
 
   playGame(){
-    console.log("playGame");
 
     let lost = false;
 
@@ -128,15 +121,9 @@ class Svg extends React.Component {
   }
 
   createFoods(){
-    console.log("createFoods");
-    let tempFoods = []
-
     for (let i = 0; i < 100; i++){
-      tempFoods.push(this.setFood("red"));
+      this.setFood("red");
     }
-    this.setState({
-      foods: tempFoods
-    })
   }
 
   setFood(color){
@@ -149,10 +136,9 @@ class Svg extends React.Component {
       cx: food.cx,
       cy: food.cy,
       fill: food.fill
-    })
-    this.updateFood();
-    console.log(this.state.foods)
+    });
 
+    this.updateFood();
     return food;
   }
 
@@ -297,13 +283,12 @@ class Svg extends React.Component {
 
   renderSvg(){
     //<Header player={this.state.player} />
-    console.log("PLAYERS: ", this.state.players.data);
     return (
       <div>
         <div style={this.style}>
           <svg id="board"  style={this.svgstyle} width="1000" height="650">
+            { this.state.foods.data.map(this.renderFood) }
             { this.state.players.data.map(this.renderPlayer) }
-            { this.state.foods.map(this.renderFood) }
           </svg>
         </div>
       </div>

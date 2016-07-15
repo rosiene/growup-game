@@ -38,7 +38,7 @@ class BaseModel {
   }
 
   createResource(resource) {
-    this.resources = this.resources.concat(resource);
+    this.resources.data = this.resources.data.concat(resource);
     this.inform();
   }
 
