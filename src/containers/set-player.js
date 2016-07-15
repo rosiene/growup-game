@@ -6,10 +6,11 @@ class SetPlayer extends React.Component {
     event.preventDefault();
 
     let name = this.refs.newPlayer.value;
-    let color = this.refs.color.value;
+    let fill = this.refs.color.value;
+
     console.log("Registering as: ", name);
 
-    this.props.onChange(name, color);
+    this.props.onChange(name, fill);
   }
 
   renderUserForm() {
@@ -17,7 +18,7 @@ class SetPlayer extends React.Component {
       <form onSubmit={ this.onSubmit.bind(this) }>
         <input ref="newPlayer" type="text" placeholder="What's your name?" />
         <input ref="color" type="text" placeholder="Color?" />
-        <input type="submit" value="Register" />
+        <input type="submit" value="Start" />
       </form>
     );
   }
@@ -36,8 +37,8 @@ class SetPlayer extends React.Component {
   }
 
   render() {
+    return this.renderUserForm();
     if (this.props.username == "") {
-      return this.renderUserForm();
     } else {
       return this.renderGreeting();
     }
