@@ -7,10 +7,11 @@ class HeaderBar extends React.Component{
     super();
 
     this.baseStyle = ({
-      backgroundColor: "#9CCC65",
+      backgroundColor: "#583F7E",
       color: "#FAFAFA",
-      position: "fixed",
-      height: 50,
+      position: "center",
+      width: "180px",
+      height: "600px",
       top: 0,
       left: 0,
       right: 0,
@@ -21,6 +22,8 @@ class HeaderBar extends React.Component{
 
     this.first = ({
       float: "left",
+      paddingTop: "10px",
+      paddingBottom: "20px",
       width: 300,
       fontSize: 30,
       fontWeight: "bold",
@@ -29,10 +32,13 @@ class HeaderBar extends React.Component{
 
     this.second = ({
       padding: "10px",
-      float: "left",
-      width: 200,
-      textAlign: "center",
       fontWeight: "bold"
+    });
+
+    this.third = ({
+      padding: "10px",
+      paddingTop: "40px",
+      fontWeight: 'bold'
     });
   }
 
@@ -53,6 +59,9 @@ class HeaderBar extends React.Component{
         </div>
         <div style={this.second}>
           Delay: {this.props.delay}
+        </div>
+        <div style={this.third}>
+          Ranking:{this.props.name}
         </div>
       </div>
     );

@@ -6,7 +6,7 @@ import Food from './food';
 import SetPlayer from './set-player';
 import FoodModel from '../models/FoodModel';
 import PlayerModel from '../models/PlayerModel';
-
+import Colors from '../styles/colors';
 
 class Svg extends React.Component {
 
@@ -16,13 +16,16 @@ class Svg extends React.Component {
     this.utils = new Utils();
 
     this.style = {
-      paddingTop: 60,
+      paddingTop: 40,
     };
 
     this.svgstyle = {
       position: 'fixed',
-      border: '1px solid red',
-      top: 120,
+      border: '2px solid black',
+      top: 10,
+      marginLeft: "200px",
+      backgroundColor: "#252933",
+      boxShadow: "1px 1px 5px rgba(0,0,0,0.3)",
     };
 
     this.state = {
@@ -140,8 +143,8 @@ class Svg extends React.Component {
   }
 
   setFood(color){
-    let x = Math.floor(Math.random() * 1090);
-    let y = Math.floor(Math.random() * 560);
+    let x = Math.floor(Math.random() * 990);
+    let y = Math.floor(Math.random() * 640);
     let food = {cx: x, cy: y, r:6, fill:color };
 
     this.utils.store("food.cx", food.cx);
@@ -284,14 +287,17 @@ class Svg extends React.Component {
   }
 
   renderPlayer(player, index){
-    return (<Player key={index} cx={player.cx} cy={player.cy} r={player.r} fill={player.fill} />);
+    return (
+      <Player key={index} cx={player.cx} cy={player.cy} r={player.r} fill={player.fill} />);
   }
 
   renderSvg(){
+    //<Header player={this.state.player} />
+    
     return (
       <div>
         <div style={this.style}>
-          <svg id="board"  style={this.svgstyle} width="1100" height="570">
+          <svg id="board"  style={this.svgstyle} width="1000" height="650">
             { this.state.foods.map(this.renderFood) }
             { this.state.players.map(this.renderPlayer) }
           </svg>
