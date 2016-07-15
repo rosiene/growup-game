@@ -1,4 +1,10 @@
 import React from 'react';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
+
+const style = {
+  margin: 12,
+};
 
 class SetPlayer extends React.Component {
 
@@ -15,11 +21,17 @@ class SetPlayer extends React.Component {
 
   renderUserForm() {
     return (
-      <form onSubmit={ this.onSubmit.bind(this) }>
-        <input ref="newPlayer" type="text" placeholder="What's your name?" />
-        <input ref="color" type="text" placeholder="Color?" />
-        <input type="submit" value="Start" />
-      </form>
+      <div>
+        <form onSubmit={ this.onSubmit.bind(this) }>
+          <TextField floatingLabelText="What is your nickname?" ref="newPlayer"/>
+          <br/>
+          <TextField floatingLabelText="Color?" ref="color"/>
+          <br/>
+          <RaisedButton label="Start" primary={true} style={style} type="submit"/>
+
+
+        </form>
+      </div>
     );
   }
 
