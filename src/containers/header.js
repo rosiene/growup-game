@@ -1,5 +1,5 @@
 import React from 'react';
-import HeaderBar from '../components/headerbar'
+import HeaderBar from '../components/headerbar';
 
 class Header extends React.Component {
 
@@ -11,7 +11,8 @@ class Header extends React.Component {
           food_eaten={this.props.player.food_eaten}
           time_alive={this.props.player.time_alive}
           delay={this.props.player.delay}
-           />
+          raking={this.props.name}
+          />
       </div>
     );
   }

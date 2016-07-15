@@ -4,7 +4,7 @@ import Player from './player';
 import Header from './header';
 import Food from './food';
 import SetPlayer from './set-player';
-
+import Colors from '../styles/colors';
 
 class Svg extends React.Component {
 
@@ -16,13 +16,16 @@ class Svg extends React.Component {
     let name = this.utils.store("game.player");
 
     this.style = {
-      paddingTop: 60,
+      paddingTop: 40,
     };
 
     this.svgstyle = {
       position: 'fixed',
-      border: '1px solid red',
-      top: 120,
+      border: '2px solid black',
+      top: 10,
+      marginLeft: "200px",
+      backgroundColor: "#252933",
+      boxShadow: "1px 1px 5px rgba(0,0,0,0.3)",
     };
 
     this.state = {
@@ -37,7 +40,8 @@ class Svg extends React.Component {
         name: "",
         food_eaten: 0,
         time_alive: "00:00:00",
-        delay: 5
+        delay: 5,
+        ranking: 0
       }
     };
   }
@@ -200,6 +204,10 @@ class Svg extends React.Component {
 
   }
 
+  randomColor(){
+
+  }
+
   newFood(color){
     let x = Math.floor(Math.random() * 1090);
     let y = Math.floor(Math.random() * 560);
@@ -227,18 +235,18 @@ class Svg extends React.Component {
 
   render(){
     return(
-    <div>
-      <Header player={this.state.player} />
-      <div style={this.style}>
-        <SetPlayer
-            username={ this.state.player.name }
-            onChange={ this.setPlayer.bind(this) } />
-        <svg id="board"  style={this.svgstyle} width="1100" height="570">
-          { this.state.foods.map(this.renderFood) }
-          <Player player={this.state.player} />
-        </svg>
+      <div>
+        <Header player={this.state.player} />
+          <div style={this.style}>
+            <SetPlayer
+                username={ this.state.player.name }
+                onChange={ this.setPlayer.bind(this) } />
+            <svg id="board"  style={this.svgstyle} width="1100" height="600" >
+              { this.state.foods.map(this.renderFood) }
+              <Player player={this.state.player} />
+            </svg>
+          </div>
       </div>
-    </div>
     );
   }
 }
