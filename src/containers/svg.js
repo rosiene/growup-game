@@ -31,13 +31,14 @@ class Svg extends React.Component {
     this.state = {
       foods: [],
       players: [],
-      game: false
+      game: false,
+      currentPlayer: {}
     };
 
     this.modelFood = new FoodModel();
     this.modelFood.subscribe(this.updateFood.bind(this));
 
-    this.modelPlayer = new FoodModel();
+    this.modelPlayer = new PlayerModel();
     this.modelPlayer.subscribe(this.updatePlayer.bind(this));
   }
 
@@ -49,48 +50,46 @@ class Svg extends React.Component {
 
   updatePlayer(){
     this.setState({
+      currentPlayer: this.modelPlayer.resources.data[this.modelPlayer.resources.data.length - 1]
+    });
+  }
+
+  updatePlayers(){
+    this.setState({
       players: this.modelPlayer.resources
     });
   }
 
   setPlayer(name, fill) {
-    console.log("setPlayer");
 
     let player = this.newPlayer(name, fill);
 
-    this.utils.store("player.player", player.name);
-    this.utils.store("player.r", player.r);
-    this.utils.store("player.cx", player.cx);
-    this.utils.store("player.cy", player.cy);
-    this.utils.store("player.nx", player.nx);
-    this.utils.store("player.ny", player.ny);
-    this.utils.store("player.fill", player.fill);
-    this.utils.store("player.food_eaten", player.food_eaten);
-    this.utils.store("player.time_alive", player.time_alive);
-    this.utils.store("player.delay", player.delay);
-    this.utils.store("player.ranking", player.ranking);
-    this.utils.store("player.stroke", player.stroke);
-    this.utils.store("player.stroke_width", player.stroke_width);
-
-    let tempPlayers = []
-    if (this.state.players){
-      tempPlayers = this.state.players;
-    }
-    tempPlayers.push(player);
-
-    this.setState({
-      players: tempPlayers
+    this.modelPlayer.addResource({
+      name: player.name,
+      r: player.r,
+      cx: player.cx,
+      cy: player.cy,
+      nx: player.nx,
+      ny: player.ny,
+      fill: player.fill,
+      stroke: player.stroke,
+      stroke_width: player.stroke_width,
+      food_eaten: player.food_eaten,
+      time_alive: player.time_alive,
+      delay: player.delay,
+      ranking: player.ranking
     });
+    this.updatePlayers();
+    this.updatePlayer();
 
     this.setState({
         game: true
-    })
+    });
 
     this.startGame();
   }
 
   newPlayer(name, fill){
-    console.log("newPlayer");
 
     return {
         name: name,
@@ -110,36 +109,31 @@ class Svg extends React.Component {
   }
 
   startGame() {
-    console.log("startGame");
+    this.updateFood();
+    if (this.state.foods) {
+      this.createFoods();
+    }
 
-    this.createFoods();
+    this.updateTime(0);
     this.playGame();
   }
 
   playGame(){
-    console.log("playGame");
 
     let lost = false;
 
-    while(!lost){
-      this.updateTime();
+    //while(!lost){
       //this.updateGame();
       //window.addEventListener('mousemove', (event) => {
       //  this.updatePosition(event.clientX, event.clientY);
       //});
-    }
+    //}
   }
 
   createFoods(){
-    console.log("createFoods");
-    let tempFoods = []
-
     for (let i = 0; i < 100; i++){
-      tempFoods.push(this.setFood("red"));
+      this.setFood("red");
     }
-    this.setState({
-      foods: tempFoods
-    })
   }
 
   setFood(color){
@@ -147,11 +141,14 @@ class Svg extends React.Component {
     let y = Math.floor(Math.random() * 640);
     let food = {cx: x, cy: y, r:6, fill:color };
 
-    this.utils.store("food.cx", food.cx);
-    this.utils.store("food.cx", food.cy);
-    this.utils.store("food.r", food.r);
-    this.utils.store("food.fill", food.fill);
+    this.modelFood.addResource({
+      r: food.r,
+      cx: food.cx,
+      cy: food.cy,
+      fill: food.fill
+    });
 
+    this.updateFood();
     return food;
   }
 
@@ -207,10 +204,17 @@ class Svg extends React.Component {
     return arr;
   }
 
-  updateTime(){
-    this.state.players.map(function(player){
-      player.time_alive = player.time_alive + 1;
-    })
+  updateTime(time){
+     setTimeout(() => {
+       time += 1;
+       let tempCurrentPlayer = this.state.currentPlayer;
+       console.log(tempCurrentPlayer);
+       tempCurrentPlayer.time_alive = this.setFormatTime(time);
+       this.setState({
+         currentPlayer: tempCurrentPlayer
+       });
+       this.updateTime(time);
+     }, 1000);
   }
 
   setFormatTime(time){
@@ -282,24 +286,26 @@ class Svg extends React.Component {
     }, 500);
   }
 
-  renderFood(food, index){
-    return (<Food key={index} cx={food.cx} cy={food.cy} r={food.r} fill={food.fill} />);
-  }
-
   renderPlayer(player, index){
     return (
-      <Player key={index} cx={player.cx} cy={player.cy} r={player.r} fill={player.fill} />);
+      <Player key={index} cx={player.cx} cy={player.cy} r={player.r} fill={player.fill} />
+    );
+  }
+
+  renderFood(food, index){
+    return (
+      <Food key={index} cx={food.cx} cy={food.cy} r={food.r} fill={food.fill} />
+    );
   }
 
   renderSvg(){
-    //<Header player={this.state.player} />
-    
     return (
       <div>
+        <Header player={this.state.currentPlayer} />
         <div style={this.style}>
           <svg id="board"  style={this.svgstyle} width="1000" height="650">
-            { this.state.foods.map(this.renderFood) }
-            { this.state.players.map(this.renderPlayer) }
+            { this.state.foods.data.map(this.renderFood) }
+            { this.state.players.data.map(this.renderPlayer) }
           </svg>
         </div>
       </div>
@@ -313,7 +319,6 @@ class Svg extends React.Component {
   }
 
   render(){
-    console.log(this.state.game);
     if (!this.state.game){
       return this.renderSetPlayer();
     }else{

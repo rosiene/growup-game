@@ -3,12 +3,8 @@ import BaseModel from './BaseModel';
 class FoodModel extends BaseModel {
   defaults() {
     return {
-      r,
-      cx,
-      cy,
-      fill,
-      createdAt: newDate(),
-      updatedAt: newDate()
+      createdAt: new Date(),
+      updatedAt: new Date()
     };
   }
 
