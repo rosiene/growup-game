@@ -6,6 +6,8 @@ import Header from './header';
 import Food from './food';
 import SetPlayer from './set-player';
 import Colors from '../styles/colors';
+import Circle from './circle';
+import PlayerTwo from './playerTwo';
 
 class Svg extends React.Component {
 
@@ -258,7 +260,9 @@ class Svg extends React.Component {
                 onChange={ this.setPlayer.bind(this) } />
             <svg id="board"  style={this.svgstyle} width="1100" height="600" >
               { this.state.foods.map(this.renderFood) }
+
               <Player player={this.state.player} />
+              <PlayerTwo />
             </svg>
           </div>
       </div>
