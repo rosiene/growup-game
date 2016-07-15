@@ -2,7 +2,7 @@ import SocketClient from 'socket.io-client';
 import Feathers from 'feathers-client';
 import Utils from '../lib/Utils';
 
-const API_HOST = "http://localhost:3030";
+const API_HOST = "https://desolate-dawn-60489.herokuapp.com";
 
 class BaseModel {
   defaults() { return {}; }

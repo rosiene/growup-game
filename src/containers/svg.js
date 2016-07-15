@@ -58,28 +58,20 @@ class Svg extends React.Component {
 
     let player = this.newPlayer(name, fill);
 
-    this.utils.store("player.player", player.name);
-    this.utils.store("player.r", player.r);
-    this.utils.store("player.cx", player.cx);
-    this.utils.store("player.cy", player.cy);
-    this.utils.store("player.nx", player.nx);
-    this.utils.store("player.ny", player.ny);
-    this.utils.store("player.fill", player.fill);
-    this.utils.store("player.food_eaten", player.food_eaten);
-    this.utils.store("player.time_alive", player.time_alive);
-    this.utils.store("player.delay", player.delay);
-    this.utils.store("player.ranking", player.ranking);
-    this.utils.store("player.stroke", player.stroke);
-    this.utils.store("player.stroke_width", player.stroke_width);
-
-    let tempPlayers = []
-    if (this.state.players){
-      tempPlayers = this.state.players;
-    }
-    tempPlayers.push(player);
-
-    this.setState({
-      players: tempPlayers
+    this.modelPlayer.addResource({
+      name: player.name
+      // r: player.r,
+      // cx: player.cx,
+      // cy: player.cy,
+      // nx: player.nx,
+      // ny: player.ny,
+      // fill: player.fill,
+      // food_eaten: player.food_eaten,
+      // time_alive: player.time_alive,
+      // delay: player.delay,
+      // ranking: player.ranking,
+      // stroke: player.stroke,
+      // stroke_width: player.stroke_width
     });
 
     this.setState({
@@ -108,6 +100,8 @@ class Svg extends React.Component {
         stroke_width: 2
     }
   }
+
+
 
   startGame() {
     console.log("startGame");
@@ -147,10 +141,12 @@ class Svg extends React.Component {
     let y = Math.floor(Math.random() * 640);
     let food = {cx: x, cy: y, r:6, fill:color };
 
-    this.utils.store("food.cx", food.cx);
-    this.utils.store("food.cx", food.cy);
-    this.utils.store("food.r", food.r);
-    this.utils.store("food.fill", food.fill);
+    this.modelFood.addResource({
+      r: food.r,
+      cx: food.cx,
+      cy: food.cy,
+      fill: food.fill
+    })
 
     return food;
   }
@@ -293,7 +289,6 @@ class Svg extends React.Component {
 
   renderSvg(){
     //<Header player={this.state.player} />
-    
     return (
       <div>
         <div style={this.style}>
@@ -311,6 +306,7 @@ class Svg extends React.Component {
       <SetPlayer onChange={ this.setPlayer.bind(this) } />
     );
   }
+
 
   render(){
     console.log(this.state.game);
