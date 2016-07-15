@@ -66,20 +66,20 @@ class Svg extends React.Component {
       nx: player.nx,
       ny: player.ny,
       fill: player.fill,
+      stroke: player.stroke,
+      stroke_width: player.stroke_width,
       food_eaten: player.food_eaten,
       time_alive: player.time_alive,
       delay: player.delay,
-      ranking: player.ranking,
-      stroke: player.stroke,
-      stroke_width: player.stroke_width
+      ranking: player.ranking
     });
-
     this.updatePlayer();
-    console.log(player);
+
+    console.log(this.state.players);
 
     this.setState({
         game: true
-    })
+    });
 
     this.startGame();
   }
@@ -151,6 +151,7 @@ class Svg extends React.Component {
       fill: food.fill
     })
     this.updateFood();
+    console.log(this.state.foods)
 
     return food;
   }
@@ -282,22 +283,26 @@ class Svg extends React.Component {
     }, 500);
   }
 
-  renderFood(food, index){
-    return (<Food key={index} cx={food.cx} cy={food.cy} r={food.r} fill={food.fill} />);
-  }
-
   renderPlayer(player, index){
     return (
-      <Player key={index} cx={player.cx} cy={player.cy} r={player.r} fill={player.fill} />);
+      <Player key={index} cx={player.cx} cy={player.cy} r={player.r} fill={player.fill} />
+    );
+  }
+
+  renderFood(food, index){
+    return (
+      <Food key={index} cx={food.cx} cy={food.cy} r={food.r} fill={food.fill} />
+    );
   }
 
   renderSvg(){
     //<Header player={this.state.player} />
-    // { this.state.players.map(this.renderPlayer) }
+    console.log("PLAYERS: ", this.state.players.data);
     return (
       <div>
         <div style={this.style}>
           <svg id="board"  style={this.svgstyle} width="1000" height="650">
+            { this.state.players.data.map(this.renderPlayer) }
             { this.state.foods.map(this.renderFood) }
           </svg>
         </div>
