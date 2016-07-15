@@ -31,7 +31,8 @@ class Svg extends React.Component {
     this.state = {
       foods: [],
       players: [],
-      game: false
+      game: false,
+      currentPlayer: {}
     };
 
     this.modelFood = new FoodModel();
@@ -74,6 +75,12 @@ class Svg extends React.Component {
     });
     this.updatePlayer();
 
+    let currentPlayer = this.modelPlayer.resources.data[this.modelPlayer.resources.data.length - 1];
+    console.log(currentPlayer);
+    this.setState({
+      currentPlayer: currentPlayer
+    })
+
     this.setState({
         game: true
     });
@@ -104,6 +111,7 @@ class Svg extends React.Component {
 
   startGame() {
     this.createFoods();
+    this.updateTime(0);
     this.playGame();
   }
 
@@ -112,7 +120,6 @@ class Svg extends React.Component {
     let lost = false;
 
     //while(!lost){
-      //this.updateTime();
       //this.updateGame();
       //window.addEventListener('mousemove', (event) => {
       //  this.updatePosition(event.clientX, event.clientY);
@@ -194,11 +201,18 @@ class Svg extends React.Component {
     return arr;
   }
 
-  // updateTime(){
-  //   this.state.players.map(function(player){
-  //     player.time_alive = player.time_alive + 1;
-  //   })
-  // }
+  updateTime(time){
+     setTimeout(() => {
+       time += 1;
+       let tempCurrentPlayer = this.state.currentPlayer;
+       console.log(tempCurrentPlayer);
+       tempCurrentPlayer.time_alive = this.setFormatTime(time);
+       this.setState({
+         currentPlayer: tempCurrentPlayer
+       });
+       this.updateTime(time);
+     }, 1000);
+  }
 
   setFormatTime(time){
     var hours   = Math.floor(time / 3600);
@@ -282,9 +296,9 @@ class Svg extends React.Component {
   }
 
   renderSvg(){
-    //<Header player={this.state.player} />
     return (
       <div>
+        <Header player={this.state.currentPlayer} />
         <div style={this.style}>
           <svg id="board"  style={this.svgstyle} width="1000" height="650">
             { this.state.foods.data.map(this.renderFood) }
