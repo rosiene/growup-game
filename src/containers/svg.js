@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash'
 import Utils from '../lib/Utils';
 import Player from './player';
 import Header from './header';
@@ -12,7 +13,7 @@ class Svg extends React.Component {
     super();
 
     this.utils = new Utils();
-
+    this.randomColors();
     let name = this.utils.store("game.player");
 
     this.style = {
@@ -184,7 +185,7 @@ class Svg extends React.Component {
   loadNewFood(){
     setTimeout(() => {
       let tempFoods = this.state.foods;
-      tempFoods.push(this.newFood("green"));
+      tempFoods.push(this.newFood(this.randomColors()));
 
       this.setState({
         foods: tempFoods
@@ -196,7 +197,7 @@ class Svg extends React.Component {
   createFoods(){
     let tempFoods = [];
     for (let i = 0; i < 100; i++){
-      tempFoods.push(this.newFood("red"));
+      tempFoods.push(this.newFood(this.randomColors()));
     }
     this.setState({
       foods: tempFoods
@@ -204,14 +205,28 @@ class Svg extends React.Component {
 
   }
 
-  randomColor(){
+  randomColors(){
 
-  }
+   var tempColor = [
+     "#ff1a1a",
+     "#3366ff",
+     "#33cc33",
+     "#ffff00",
+     "#ff0066",
+     "#ff471a",
+     "#cc0099"
+   ];
+
+   let sampleColor = _.sample(tempColor);
+   return sampleColor;
+   console.log(sampleColor);
+
+ }
 
   newFood(color){
     let x = Math.floor(Math.random() * 1090);
     let y = Math.floor(Math.random() * 560);
-    return {cx: x, cy: y, r:"6", fill:color };
+    return {cx: x, cy: y, r:"8", fill:color };
   }
 
 
