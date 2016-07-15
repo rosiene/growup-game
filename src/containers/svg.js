@@ -50,6 +50,12 @@ class Svg extends React.Component {
 
   updatePlayer(){
     this.setState({
+      currentPlayer: this.modelPlayer.resources.data[this.modelPlayer.resources.data.length - 1]
+    });
+  }
+
+  updatePlayers(){
+    this.setState({
       players: this.modelPlayer.resources
     });
   }
@@ -73,13 +79,8 @@ class Svg extends React.Component {
       delay: player.delay,
       ranking: player.ranking
     });
+    this.updatePlayers();
     this.updatePlayer();
-
-    let currentPlayer = this.modelPlayer.resources.data[this.modelPlayer.resources.data.length - 1];
-    console.log(currentPlayer);
-    this.setState({
-      currentPlayer: currentPlayer
-    })
 
     this.setState({
         game: true
@@ -107,10 +108,12 @@ class Svg extends React.Component {
     }
   }
 
-
-
   startGame() {
-    this.createFoods();
+    this.updateFood();
+    if (this.state.foods) {
+      this.createFoods();
+    }
+
     this.updateTime(0);
     this.playGame();
   }
@@ -314,7 +317,6 @@ class Svg extends React.Component {
       <SetPlayer onChange={ this.setPlayer.bind(this) } />
     );
   }
-
 
   render(){
     if (!this.state.game){
