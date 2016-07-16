@@ -10,6 +10,8 @@ class Player extends React.Component {
         cx={this.props.cx}
         cy={this.props.cy}
         fill={this.props.fill}
+        stroke={this.props.stroke}
+        stroke_width={this.props.stroke_width}
         />
     );
   }
