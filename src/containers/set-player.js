@@ -38,7 +38,12 @@ const styleButton = {
   justifyContent: 'center',
   width: 225
 };
-
+ const madeText = {
+   padding: 10,
+   fontSize: 10,
+   display: 'flex',
+   justifyContent: 'center'
+ };
 
 class SetPlayer extends React.Component {
 
@@ -84,6 +89,9 @@ class SetPlayer extends React.Component {
             <br/><br/>
             <input type="submit" value="Start" />
           </form>
+          </div>
+          <div style={madeText}>
+          Made by: Rosiene, Deisi, Aeshta and Mariano
           </div>
         </Card>
       </div>
