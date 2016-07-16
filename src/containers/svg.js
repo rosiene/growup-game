@@ -94,15 +94,16 @@ class Svg extends React.Component {
 
     setTimeout(() => {
       this.updatePlayers();
-      this.getCurrentPlayer();
+
+      setTimeout(() => {
+        this.getCurrentPlayer();
+      }, 50);
 
       this.setState({
           game: true
       });
-
       this.startGame();
-
-    }, 40)
+    }, 50);
 
   }
 
@@ -110,8 +111,8 @@ class Svg extends React.Component {
     return {
         name: name,
         r: 20,
-        cx: 20,
-        cy: 20,
+        cx: Math.floor(Math.random() * 990),
+        cy: Math.floor(Math.random() * 640),
         nx: 20,
         ny: 20,
         fill: fill,
@@ -183,7 +184,8 @@ class Svg extends React.Component {
     setTimeout(() => {
 
       let ate = this.eatFood(this.state.currentPlayer.nx, this.state.currentPlayer.ny);
-      ate = ate + parseInt(this.state.currentPlayer.food_eaten);
+      ate += this.eatPlayer(this.state.currentPlayer.nx, this.state.currentPlayer.ny);
+      ate += parseInt(this.state.currentPlayer.food_eaten);
 
       let delay = parseInt(this.state.currentPlayer.delay);
 
@@ -262,6 +264,46 @@ class Svg extends React.Component {
     if (seconds < 10) {seconds = "0"+seconds;}
 
     return hours+':'+minutes+':'+seconds;
+  }
+
+  eatPlayer(x, y){
+    let ate = 0;
+    let tempPlayer = []
+
+    for (let i = 0; i < this.state.players.length; i++){
+
+      let player = this.state.players[i];
+      let currentPlayer = this.state.currentPlayer;
+
+      let startXPlayer = parseInt(player.cx) - parseInt(player.r);
+      let startYPlayer = parseInt(player.cy) - parseInt(player.r);
+      let endXPlayer = parseInt(player.cx) + parseInt(player.r);
+      let endYPlayer = parseInt(player.cy) + parseInt(player.r);
+
+      let startXCurrentPlayer = parseInt(currentPlayer.cx) - parseInt(currentPlayer.r);
+      let startYCurrentPlayer = parseInt(currentPlayer.cy) - parseInt(currentPlayer.r);
+      let endXCurrentPlayer = parseInt(currentPlayer.cx) + parseInt(currentPlayer.r);
+      let endYCurrentPlayer = parseInt(currentPlayer.cy) + parseInt(currentPlayer.r);
+
+      if (startXCurrentPlayer < startXPlayer &&
+           startYCurrentPlayer < startYPlayer &&
+          endXCurrentPlayer > endXPlayer &&
+          endYCurrentPlayer > endYPlayer){
+        if (player.food_eaten < 5) {
+          ate = ate + 5;
+        }else{
+          ate = ate + player.food_eaten;
+        }
+        this.modelPlayer.destroy(player);
+        this.updatePlayers();
+      }else{
+        tempPlayer.push(player);
+      }
+    }
+    this.setState({
+      players: tempPlayer
+    });
+    return ate;
   }
 
   eatFood(x, y){
