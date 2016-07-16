@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import Utils from '../lib/Utils';
 import Player from './player';
 import Header from './header';
@@ -14,6 +15,7 @@ class Svg extends React.Component {
     super();
 
     this.utils = new Utils();
+    this.randomColors();
 
     this.style = {
       paddingTop: 40,
@@ -142,8 +144,23 @@ class Svg extends React.Component {
 
   createFoods(){
     for (let i = 0; i < 100; i++){
-      this.setFood("red");
+      this.setFood(this.randomColors());
     }
+  }
+
+  randomColors(){
+   var tempColor = [
+     "#ff1a1a",
+     "#3366ff",
+     "#33cc33",
+     "#ffff00",
+     "#ff0066",
+     "#ff471a",
+     "#cc0099"
+   ];
+   let sampleColor = _.sample(tempColor);
+   return sampleColor;
+   console.log(sampleColor);
   }
 
   setFood(color){
@@ -271,7 +288,6 @@ class Svg extends React.Component {
           endYPlayer > endYFood){
         ate = ate + 1;
         this.loadNewPositionFood(food);
-        console.log(food);
       }else{
         tempFoods.push(food);
       }
@@ -279,7 +295,6 @@ class Svg extends React.Component {
     this.setState({
       foods: tempFoods
     });
-
     return ate;
   }
 
@@ -294,7 +309,7 @@ class Svg extends React.Component {
 
 
   loadNewPositionFood(food){
-    food.fill = "green";
+    food.fill = this.randomColors();
     food.cx = Math.floor(Math.random() * 990);;
     food.cy = Math.floor(Math.random() * 640);;
     this.modelFood.updateResource(food);
