@@ -5,7 +5,7 @@ class Ranking extends React.Component{
   render() {
     return (
         <li>
-          {this.props.name} [{this.props.food_eaten}]
+          {this.props.name} [{this.props.score}]
         </li>
     );
   }

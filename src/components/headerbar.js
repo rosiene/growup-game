@@ -39,7 +39,7 @@ class HeaderBar extends React.Component{
   }
 
   getPlayers(){
-    return _.sortBy(this.props.players, 'food_eaten')
+    return _.sortBy(this.props.players, 'food_eaten').reverse();
   }
 
   renderRanking(player, index){
