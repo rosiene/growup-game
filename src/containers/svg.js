@@ -202,7 +202,8 @@ class Svg extends React.Component {
           food_eaten: ate,
           time_alive: this.state.currentPlayer.time_alive,
           speed: 0,
-          delay: this.playerDelay(delay, ate)[2]
+          delay: this.playerDelay(delay, ate)[2],
+          ranking: this.getPossitionRanking()
         }
       });
       this.updatePlayer();
@@ -210,6 +211,11 @@ class Svg extends React.Component {
       this.updateFood();
       this.updateGame();
     }, 100);
+  }
+
+  getPossitionRanking(){
+    //code
+    return 0;
   }
 
   playerGrow(eatFood){
@@ -330,7 +336,7 @@ class Svg extends React.Component {
   renderSvg(){
     return (
       <div>
-        <Header player={this.state.currentPlayer} />
+        <Header currentPlayer={this.state.currentPlayer} players={this.state.players} />
         <div style={this.style}>
           <svg id="board"  style={this.svgstyle} width="1000" height="650">
             { this.state.foods.map(this.renderFood) }
