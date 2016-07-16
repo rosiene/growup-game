@@ -1,4 +1,6 @@
 import React from 'react';
+import Ranking from '../containers/ranking';
+import _ from 'lodash';
 
 class HeaderBar extends React.Component{
 
@@ -36,6 +38,14 @@ class HeaderBar extends React.Component{
 
   }
 
+  getPlayers(){
+    return _.sortBy(this.props.players, 'food_eaten')
+  }
+
+  renderRanking(player, index){
+    return (<Ranking key={index} name={player.name} score={player.food_eaten} />);
+  }
+
   render() {
     return (
       <div style={this.baseStyle}>
@@ -55,7 +65,10 @@ class HeaderBar extends React.Component{
           Delay: {this.props.delay}
         </div>
         <div style={this.second}>
-          Ranking: {this.props.food_eaten}
+          Ranking:
+          <ol>
+            {this.getPlayers().map(this.renderRanking)}<br />
+          </ol>
         </div>
       </div>
     );

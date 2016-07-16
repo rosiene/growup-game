@@ -18,6 +18,8 @@ class Svg extends React.Component {
     this.utils = new Utils();
     this.randomColors();
 
+    this.currentPlayerPositions = [];
+
     this.style = {
       paddingTop: 40,
     };
@@ -42,18 +44,18 @@ class Svg extends React.Component {
     this.modelFood.subscribe(this.updateFood.bind(this));
 
     this.modelPlayer = new PlayerModel();
-    this.modelPlayer.subscribe(this.updatePlayer.bind(this));
+    // this.modelPlayer.subscribe(this.updatePlayer.bind(this));
   }
 
   updateFood(){
     this.setState({
-      foods: this.modelFood.resources.data
+      foods: this.modelFood.resources
     });
   }
 
   getCurrentPlayer(){
     this.setState({
-      currentPlayer: this.modelPlayer.resources.data[this.modelPlayer.resources.data.length-1]
+      currentPlayer: this.modelPlayer.resources[this.modelPlayer.resources.length-1]
     });
   }
 
@@ -61,68 +63,50 @@ class Svg extends React.Component {
     let tempPlayer = this.state.players.map((player) => {
       return this.state.currentPlayer._id === player._id ? this.state.currentPlayer : player;
     });
-    this.setState({
-      players: tempPlayer
-    })
-    //this.modelPlayer.updateResource(this.state.currentPlayer);
+    this.modelPlayer.save(this.state.currentPlayer, tempPlayer);
   }
 
   updatePlayers(){
     this.setState({
-      players: this.modelPlayer.resources.data
+      players: this.modelPlayer.resources
     });
   }
 
   setPlayer(name, fill) {
 
-    let player = this.newPlayer(name, fill);
-
     this.modelPlayer.addResource({
-      name: player.name,
-      r: player.r,
-      cx: player.cx,
-      cy: player.cy,
-      nx: player.nx,
-      ny: player.ny,
-      fill: player.fill,
-      stroke: player.stroke,
-      stroke_width: player.stroke_width,
-      food_eaten: player.food_eaten,
-      time_alive: player.time_alive,
-      delay: player.delay,
-      ranking: player.ranking
+      name: name,
+      r: 20,
+      cx: Math.floor(Math.random() * 990),
+      cy: Math.floor(Math.random() * 640),
+      nx: 20,
+      ny: 20,
+      fill: fill,
+      stroke: "#ccc",
+      stroke_width: 2,
+      food_eaten: 0,
+      time_alive: "00:00:00",
+      delay: 5,
+      ranking: 0,
+      status: "alive"
     });
 
     setTimeout(() => {
       this.updatePlayers();
-      this.getCurrentPlayer();
+
+      setTimeout(() => {
+        this.getCurrentPlayer();
+      }, 50);
+
+      alert("Go!");
+
+      this.startGame();
 
       this.setState({
           game: true
       });
+    }, 50);
 
-      this.startGame();
-
-    }, 40)
-
-  }
-
-  newPlayer(name, fill){
-    return {
-        name: name,
-        r: 20,
-        cx: 20,
-        cy: 20,
-        nx: 20,
-        ny: 20,
-        fill: fill,
-        food_eaten: 0,
-        time_alive: "00:00:00",
-        delay: 5,
-        ranking: 0,
-        stroke: "#ccc",
-        stroke_width: 2
-    }
   }
 
   startGame() {
@@ -134,14 +118,21 @@ class Svg extends React.Component {
 
     this.updateTime(0);
     this.playGame();
+    console.log(this.state);
   }
 
   playGame(){
     window.addEventListener('mousemove', (event) => {
-      this.updatePosition(event.clientX, event.clientY);
+      this.currentPlayerPositions.push({
+        x: event.clientX,
+        y: event.clientY
+      });
+      this.updatePosition();
     });
     this.updateGame();
   }
+
+
 
   createFoods(){
     for (let i = 0; i < 100; i++){
@@ -161,7 +152,6 @@ class Svg extends React.Component {
    ];
    let sampleColor = _.sample(tempColor);
    return sampleColor;
-   console.log(sampleColor);
   }
 
   setFood(color){
@@ -180,11 +170,25 @@ class Svg extends React.Component {
     return food;
   }
 
+  checkStatus(){
+    this.modelPlayer.resources.map((current) => {
+      if (this.state.currentPlayer._id === current._id){
+        if (current.status === "dead"){
+          this.killPlayer(current);
+          alert("DEAD!!");
+          window.location.reload();
+        }
+      }
+    });
+  }
+
   updateGame(){
+
     setTimeout(() => {
 
       let ate = this.eatFood(this.state.currentPlayer.nx, this.state.currentPlayer.ny);
-      ate = ate + parseInt(this.state.currentPlayer.food_eaten);
+      ate += this.eatPlayer(this.state.currentPlayer.nx, this.state.currentPlayer.ny);
+      ate += parseInt(this.state.currentPlayer.food_eaten);
 
       let delay = parseInt(this.state.currentPlayer.delay);
 
@@ -204,27 +208,16 @@ class Svg extends React.Component {
           time_alive: this.state.currentPlayer.time_alive,
           speed: 0,
           delay: this.playerDelay(delay, ate)[2],
-          ranking: this.getPossitionRanking()
+          ranking: this.state.currentPlayer.ranking
         }
       });
       this.updatePlayer();
-      //this.updatePlayers();
+      this.updatePlayers();
       this.updateFood();
       this.updateGame();
     }, 100);
-  }
 
-  getPossitionRanking(){
-    // let players = this.state.currentPlayer.name;
-    let score = this.state.currentPlayer.food_eaten;
-
-    var players = _.sortBy(this.state.players, 'food_eaten');
-
-    return players.map((player) => {
-      return <li key={player.id} data-id={player.id}>{player.name}</li>
-    })
-    console.log(players);
-
+    this.checkStatus();
   }
 
   playerGrow(eatFood){
@@ -279,6 +272,54 @@ class Svg extends React.Component {
     return hours+':'+minutes+':'+seconds;
   }
 
+  eatPlayer(x, y){
+    let ate = 0;
+    let tempPlayer = []
+
+    for (let i = 0; i < this.state.players.length; i++){
+
+      let player = this.state.players[i];
+      let currentPlayer = this.state.currentPlayer;
+
+      let startXPlayer = parseInt(player.cx) - parseInt(player.r);
+      let startYPlayer = parseInt(player.cy) - parseInt(player.r);
+      let endXPlayer = parseInt(player.cx) + parseInt(player.r);
+      let endYPlayer = parseInt(player.cy) + parseInt(player.r);
+
+      let startXCurrentPlayer = parseInt(currentPlayer.cx) - parseInt(currentPlayer.r);
+      let startYCurrentPlayer = parseInt(currentPlayer.cy) - parseInt(currentPlayer.r);
+      let endXCurrentPlayer = parseInt(currentPlayer.cx) + parseInt(currentPlayer.r);
+      let endYCurrentPlayer = parseInt(currentPlayer.cy) + parseInt(currentPlayer.r);
+
+      if (startXCurrentPlayer < startXPlayer &&
+           startYCurrentPlayer < startYPlayer &&
+          endXCurrentPlayer > endXPlayer &&
+          endYCurrentPlayer > endYPlayer){
+        if (player.food_eaten < 5) {
+          ate = ate + 5;
+        }else{
+          ate = ate + player.food_eaten;
+        }
+        this.killPlayer(player);
+
+      }else{
+        tempPlayer.push(player);
+      }
+    }
+    this.setState({
+      players: tempPlayer
+    });
+    return ate;
+  }
+
+  killPlayer(player){
+    player.r = 0;
+    player.cx = 0;
+    player.cy = 0;
+    player.status = "dead";
+    this.modelPlayer.save(player, player);
+  }
+
   eatFood(x, y){
     let ate = 0;
     let tempFoods = [];
@@ -302,7 +343,7 @@ class Svg extends React.Component {
           endXPlayer > endXFood &&
           endYPlayer > endYFood){
         ate = ate + 1;
-        this.loadNewPositionFood(food);
+        this.newPositionFood(food);
       }else{
         tempFoods.push(food);
       }
@@ -313,21 +354,23 @@ class Svg extends React.Component {
     return ate;
   }
 
-  updatePosition(x,y){
+  updatePosition(){
+    let lastPos = this.currentPlayerPositions.pop();
+    this.currentPlayerPositions = [lastPos];
     let tempPlayer = this.state.currentPlayer;
-    tempPlayer.nx = x - 200;
-    tempPlayer.ny = y;
+    tempPlayer.nx = lastPos.x - 200;
+    tempPlayer.ny = lastPos.y;
     this.setState({
       currentPlayer: tempPlayer
     });
   }
 
 
-  loadNewPositionFood(food){
+  newPositionFood(food){
     food.fill = this.randomColors();
-    food.cx = Math.floor(Math.random() * 990);;
-    food.cy = Math.floor(Math.random() * 640);;
-    this.modelFood.updateResource(food);
+    food.cx = Math.floor(Math.random() * 990);
+    food.cy = Math.floor(Math.random() * 640);
+    this.modelFood.save(food, food);
   }
 
   renderPlayer(player, index){
@@ -352,7 +395,6 @@ class Svg extends React.Component {
             { this.state.players.map(this.renderPlayer) }
           </svg>
         </div>
-        <ul>{this.getPossitionRanking()}</ul>;
       </div>
     );
   }

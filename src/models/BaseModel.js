@@ -16,7 +16,7 @@ class BaseModel {
     this.resources = [];
 
     this.service.find(function(error, resources) {
-      this.resources = resources;
+      this.resources = resources.data;
       this.inform();
     }.bind(this));
 
@@ -38,12 +38,12 @@ class BaseModel {
   }
 
   createResource(resource) {
-    this.resources.data = this.resources.data.concat(resource);
+    this.resources = this.resources.concat(resource);
     this.inform();
   }
 
   updateResource(resource) {
-    this.resources.data = this.resources.data.map((current) => {
+    this.resources = this.resources.map((current) => {
       return resource._id === current._id ? resource : current;
     });
 
@@ -51,7 +51,7 @@ class BaseModel {
   }
 
   removeResource(resource) {
-    this.resources.data = this.resources.data.filter((current) => {
+    this.resources = this.resources.filter((current) => {
       return resource._id !== current._id;
     });
 

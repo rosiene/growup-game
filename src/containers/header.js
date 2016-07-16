@@ -11,8 +11,10 @@ class Header extends React.Component {
           food_eaten={this.props.currentPlayer.food_eaten}
           time_alive={this.props.currentPlayer.time_alive}
           delay={this.props.currentPlayer.delay}
-          ranking={this.props.players.name}
+          score={this.props.currentPlayer.food_eaten}
+          players={this.props.players}
           />
+
       </div>
     );
   }
