@@ -343,7 +343,6 @@ class Svg extends React.Component {
           <svg id="board"  style={this.svgstyle} width="1000" height="650">
             { this.state.foods.map(this.renderFood) }
             { this.state.players.map(this.renderPlayer) }
-            <circle r="50" cx="300" cy="200" fill="purple" />
           </svg>
         </div>
       </div>
