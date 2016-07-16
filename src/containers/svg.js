@@ -55,10 +55,18 @@ class Svg extends React.Component {
   }
 
   updatePlayer(){
-    this.modelPlayer.updateResource(this.state.currentPlayer);
+    //this.modelPlayer.updateResource(this.state.currentPlayer);
+    let tempPlayer = this.state.players.map((player) => {
+      return this.state.currentPlayer._id === player._id ? this.state.currentPlayer : player;
+    });
+    this.setState({
+      players: tempPlayer
+    })
+
     setTimeout(() => {
-      this.updatePlayers();
-    }, 10);
+      this.modelPlayer.updatePlayers();
+    }, 50);
+
     console.log(this.state.players.map(function(player,index){ return player.cx}));
     console.log(this.modelPlayer.resources.data.map(function(player,index){ return player.cx}));
   }
@@ -183,7 +191,7 @@ class Svg extends React.Component {
           delay: this.playerDelay(delay, ate)[2]
         }
       });
-      //this.updatePlayer();
+      this.updatePlayer();
 
       this.updateGame();
     }, 50);
@@ -318,7 +326,6 @@ class Svg extends React.Component {
           <svg id="board"  style={this.svgstyle} width="1000" height="650">
             { this.state.foods.map(this.renderFood) }
             { this.state.players.map(this.renderPlayer) }
-            <Player cx={this.state.currentPlayer.cx} cy={this.state.currentPlayer.cy} r={this.state.currentPlayer.r} fill={this.state.currentPlayer.fill} />
           </svg>
         </div>
       </div>
