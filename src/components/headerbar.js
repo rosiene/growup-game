@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 class HeaderBar extends React.Component{
 
   constructor(){
@@ -35,11 +34,6 @@ class HeaderBar extends React.Component{
       fontWeight: "bold"
     });
 
-    this.third = ({
-      padding: "10px",
-      paddingTop: "40px",
-      fontWeight: 'bold'
-    });
   }
 
   render() {
@@ -60,8 +54,8 @@ class HeaderBar extends React.Component{
         <div style={this.second}>
           Delay: {this.props.delay}
         </div>
-        <div style={this.third}>
-          Ranking:{this.props.name}
+        <div style={this.second}>
+          Rankig: {this.props.food_eaten}
         </div>
       </div>
     );

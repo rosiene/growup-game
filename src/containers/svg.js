@@ -34,7 +34,7 @@ class Svg extends React.Component {
       foods: [],
       players: [],
       game: false,
-      currentPlayer: {}
+      currentPlayer: {},
     };
 
     this.modelFood = new FoodModel();
@@ -214,8 +214,12 @@ class Svg extends React.Component {
   }
 
   getPossitionRanking(){
-    //code
-    return 0;
+    var players = this.state.players.name;
+    var score = this.state.food_eaten;
+
+    console.log(score);
+
+  return 0;
   }
 
   playerGrow(eatFood){

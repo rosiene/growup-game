@@ -7,11 +7,11 @@ class Header extends React.Component {
     return (
       <div>
         <HeaderBar
-          name={this.props.player.name}
-          food_eaten={this.props.player.food_eaten}
-          time_alive={this.props.player.time_alive}
-          delay={this.props.player.delay}
-          raking={this.props.name}
+          name={this.props.currentPlayer.name}
+          food_eaten={this.props.currentPlayer.food_eaten}
+          time_alive={this.props.currentPlayer.time_alive}
+          delay={this.props.currentPlayer.delay}
+          ranking={this.props.players.name}
           />
       </div>
     );
