@@ -97,13 +97,13 @@ class Svg extends React.Component {
 
       setTimeout(() => {
         this.getCurrentPlayer();
-      }, 50);
+      }, 300);
 
       this.setState({
           game: true
       });
       this.startGame();
-    }, 50);
+    }, 300);
 
   }
 

@@ -3,23 +3,25 @@ import React from 'react';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import MenuItem from 'material-ui/MenuItem';
 
 const style = {
   marginTop: 50,
   margin: 12,
   display: 'flex',
   justifyContent: 'center'
-
 };
 
 const cardStyle = {
   width: 500,
 };
-
-const cardTextStyle = {
+const cardTitleStyle = {
   fontWeight: "bold",
+  display: 'flex',
+  justifyContent: 'center'
+};
+const cardTextStyle = {
+  padding: 20,
+  textAlign: "center",
   display: 'flex',
   justifyContent: 'center'
 };
@@ -58,19 +60,25 @@ class SetPlayer extends React.Component {
         <CardMedia>
           <img src="https://s31.postimg.org/6b090z1iz/growup.png"/>
         </CardMedia>
-        <div style={cardTextStyle}>
+        <div style={cardTitleStyle}>
           <CardTitle title="Grow Up!" />
         </div>
         <div style={cardTextStyle}>
-          <CardText>
-             Control your cell and eat other players to grow larger!
-          </CardText>
+
+             Play the game and control your cell and eat the confetti to grow bigger! Maybe even eat other players.
+
         </div>
         <div style={cardFormStyle}>
           <form onSubmit={ this.onSubmit.bind(this) }>
             <input ref="newPlayer" type="text" placeholder="What's your name?" />
             <br/><br/>
-            <input ref="color" type="text" placeholder="Color?" />
+            <select>
+              <option ref="color"value="#3366ff">Blue</option>
+              <option value="#ff0000">Red</option>
+              <option value="#2eb82e">Green</option>
+              <option value="#b800e6">Purple</option>
+              <option value="#ffcc00">Yellow</option>
+            </select>
             <br/><br/>
             <input type="submit" value="Start" />
           </form>
@@ -79,7 +87,6 @@ class SetPlayer extends React.Component {
       </div>
     );
   }
-
 
   resetUser(event) {
     event.preventDefault();
