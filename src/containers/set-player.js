@@ -5,7 +5,7 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 
 const style = {
-  marginTop: 100,
+  marginTop: 50,
   display: 'flex',
   justifyContent: 'center'
 };
@@ -90,7 +90,7 @@ class SetPlayer extends React.Component {
           </form>
           </div>
           <div style={madeText}>
-          Made by: Rosiene, Deisi, Aeshta and Mariano
+          Made by: Aeshta, Deisi, Mariano and Rosiene
           </div>
         </Card>
       </div>

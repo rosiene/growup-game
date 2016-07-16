@@ -36,7 +36,8 @@ class Svg extends React.Component {
       foods: [],
       players: [],
       game: false,
-      currentPlayer: {}
+      currentPlayer: {},
+      currentPlayerDead: {}
     };
 
     this.modelFood = new FoodModel();
@@ -73,23 +74,21 @@ class Svg extends React.Component {
 
   setPlayer(name, fill) {
 
-    let player = this.newPlayer(name, fill);
-
     this.modelPlayer.addResource({
-      name: player.name,
-      r: player.r,
-      cx: player.cx,
-      cy: player.cy,
-      nx: player.nx,
-      ny: player.ny,
-      fill: player.fill,
-      stroke: player.stroke,
-      stroke_width: player.stroke_width,
-      food_eaten: player.food_eaten,
-      time_alive: player.time_alive,
-      delay: player.delay,
-      ranking: player.ranking,
-      status: player.status
+      name: name,
+      r: 20,
+      cx: Math.floor(Math.random() * 990),
+      cy: Math.floor(Math.random() * 640),
+      nx: 20,
+      ny: 20,
+      fill: fill,
+      stroke: "#ccc",
+      stroke_width: 2,
+      food_eaten: 0,
+      time_alive: "00:00:00",
+      delay: 5,
+      ranking: 0,
+      status: "alive"
     });
 
     setTimeout(() => {
@@ -108,25 +107,6 @@ class Svg extends React.Component {
       });
     }, 50);
 
-  }
-
-  newPlayer(name, fill){
-    return {
-        name: name,
-        r: 20,
-        cx: Math.floor(Math.random() * 990),
-        cy: Math.floor(Math.random() * 640),
-        nx: 20,
-        ny: 20,
-        fill: fill,
-        food_eaten: 0,
-        time_alive: "00:00:00",
-        delay: 5,
-        ranking: 0,
-        status: "alive",
-        stroke: "#ccc",
-        stroke_width: 2
-    }
   }
 
   startGame() {
@@ -190,7 +170,20 @@ class Svg extends React.Component {
     return food;
   }
 
+  checkStatus(){
+    this.state.players.map((current) => {
+      if (this.state.currentPlayer._id === current._id){
+        if (current.status === "dead"){
+          killPlayer(current);
+          alert("DEAD!!");
+          window.location.reload();
+        }
+      }
+    });
+  }
+
   updateGame(){
+
     setTimeout(() => {
 
       let ate = this.eatFood(this.state.currentPlayer.nx, this.state.currentPlayer.ny);
@@ -214,8 +207,7 @@ class Svg extends React.Component {
           food_eaten: ate,
           time_alive: this.state.currentPlayer.time_alive,
           speed: 0,
-          delay: this.playerDelay(delay, ate)[2],
-          status: this.state.currentPlayer.status
+          delay: this.playerDelay(delay, ate)[2]
         }
       });
       this.updatePlayer();
@@ -223,6 +215,8 @@ class Svg extends React.Component {
       this.updateFood();
       this.updateGame();
     }, 100);
+
+    this.checkStatus();
   }
 
   playerGrow(eatFood){
@@ -319,10 +313,14 @@ class Svg extends React.Component {
 
   killPlayer(player){
     player.r = 0;
-    player.cx = 20;
-    player.cy = 20;
+    player.cx = 0;
+    player.cy = 0;
     player.status = "dead";
     this.modelPlayer.save(player, player);
+
+    this.setState({
+      currentPlayerDead: player
+    });
   }
 
   eatFood(x, y){
