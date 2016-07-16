@@ -55,7 +55,7 @@ class HeaderBar extends React.Component{
           Delay: {this.props.delay}
         </div>
         <div style={this.second}>
-          Rankig: {this.props.food_eaten}
+          Ranking: {this.props.food_eaten}
         </div>
       </div>
     );

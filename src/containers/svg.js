@@ -8,6 +8,7 @@ import SetPlayer from './set-player';
 import FoodModel from '../models/FoodModel';
 import PlayerModel from '../models/PlayerModel';
 import Colors from '../styles/colors';
+import HeaderBar from '../components/headerbar';
 
 class Svg extends React.Component {
 
@@ -214,12 +215,16 @@ class Svg extends React.Component {
   }
 
   getPossitionRanking(){
-    var players = this.state.players.name;
-    var score = this.state.food_eaten;
+    // let players = this.state.currentPlayer.name;
+    let score = this.state.currentPlayer.food_eaten;
 
-    console.log(score);
+    var players = _.sortBy(this.state.players, 'food_eaten');
 
-  return 0;
+    return players.map((player) => {
+      return <li key={player.id} data-id={player.id}>{player.name}</li>
+    })
+    console.log(players);
+
   }
 
   playerGrow(eatFood){
@@ -347,6 +352,7 @@ class Svg extends React.Component {
             { this.state.players.map(this.renderPlayer) }
           </svg>
         </div>
+        <ul>{this.getPossitionRanking()}</ul>;
       </div>
     );
   }
