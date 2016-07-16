@@ -46,7 +46,8 @@ class SetPlayer extends React.Component {
     event.preventDefault();
 
     let name = this.refs.newPlayer.value;
-    let fill = this.refs.color.value;
+    let colorL = this.refs.colorList;
+    let fill = colorL.options[colorL.selectedIndex].text;
 
     console.log("Registering as: ", name);
 
@@ -65,19 +66,20 @@ class SetPlayer extends React.Component {
         </div>
         <div style={cardTextStyle}>
 
-             Play the game and control your cell and eat the confetti to grow bigger! Maybe even eat other players.
+           Play the game and control your cell and eat the confetti to grow bigger! Maybe even eat other players.
 
         </div>
         <div style={cardFormStyle}>
           <form onSubmit={ this.onSubmit.bind(this) }>
             <input ref="newPlayer" type="text" placeholder="What's your name?" />
-            <br/><br/>
-            <select>
-              <option ref="color"value="#3366ff">Blue</option>
-              <option value="#ff0000">Red</option>
-              <option value="#2eb82e">Green</option>
-              <option value="#b800e6">Purple</option>
-              <option value="#ffcc00">Yellow</option>
+            <br/>
+            <br/>
+            <select ref="colorList">
+              <option ref="color" value="#3366ff">Blue</option>
+              <option ref="color" value="#ff0000">Red</option>
+              <option ref="color" value="#2eb82e">Green</option>
+              <option ref="color" value="#b800e6">Purple</option>
+              <option ref="color" value="#ffcc00">Yellow</option>
             </select>
             <br/><br/>
             <input type="submit" value="Start" />
