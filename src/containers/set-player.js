@@ -5,8 +5,7 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 
 const style = {
-  marginTop: 50,
-  margin: 12,
+  marginTop: 100,
   display: 'flex',
   justifyContent: 'center'
 };
