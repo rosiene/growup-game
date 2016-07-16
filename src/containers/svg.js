@@ -17,6 +17,8 @@ class Svg extends React.Component {
     this.utils = new Utils();
     this.randomColors();
 
+    this.currentPlayerPositions = [];
+
     this.style = {
       paddingTop: 40,
     };
@@ -41,18 +43,18 @@ class Svg extends React.Component {
     this.modelFood.subscribe(this.updateFood.bind(this));
 
     this.modelPlayer = new PlayerModel();
-    this.modelPlayer.subscribe(this.updatePlayer.bind(this));
+    // this.modelPlayer.subscribe(this.updatePlayer.bind(this));
   }
 
   updateFood(){
     this.setState({
-      foods: this.modelFood.resources.data
+      foods: this.modelFood.resources
     });
   }
 
   getCurrentPlayer(){
     this.setState({
-      currentPlayer: this.modelPlayer.resources.data[this.modelPlayer.resources.data.length-1]
+      currentPlayer: this.modelPlayer.resources[this.modelPlayer.resources.length-1]
     });
   }
 
@@ -60,15 +62,12 @@ class Svg extends React.Component {
     let tempPlayer = this.state.players.map((player) => {
       return this.state.currentPlayer._id === player._id ? this.state.currentPlayer : player;
     });
-    this.setState({
-      players: tempPlayer
-    })
-    //this.modelPlayer.updateResource(this.state.currentPlayer);
+    this.modelPlayer.save(this.state.currentPlayer, tempPlayer);
   }
 
   updatePlayers(){
     this.setState({
-      players: this.modelPlayer.resources.data
+      players: this.modelPlayer.resources
     });
   }
 
@@ -89,7 +88,8 @@ class Svg extends React.Component {
       food_eaten: player.food_eaten,
       time_alive: player.time_alive,
       delay: player.delay,
-      ranking: player.ranking
+      ranking: player.ranking,
+      status: player.status
     });
 
     setTimeout(() => {
@@ -99,10 +99,13 @@ class Svg extends React.Component {
         this.getCurrentPlayer();
       }, 50);
 
+      alert("Go!");
+
+      this.startGame();
+
       this.setState({
           game: true
       });
-      this.startGame();
     }, 50);
 
   }
@@ -120,6 +123,7 @@ class Svg extends React.Component {
         time_alive: "00:00:00",
         delay: 5,
         ranking: 0,
+        status: "alive",
         stroke: "#ccc",
         stroke_width: 2
     }
@@ -134,14 +138,21 @@ class Svg extends React.Component {
 
     this.updateTime(0);
     this.playGame();
+    console.log(this.state);
   }
 
   playGame(){
     window.addEventListener('mousemove', (event) => {
-      this.updatePosition(event.clientX, event.clientY);
+      this.currentPlayerPositions.push({
+        x: event.clientX,
+        y: event.clientY
+      });
+      this.updatePosition();
     });
     this.updateGame();
   }
+
+
 
   createFoods(){
     for (let i = 0; i < 100; i++){
@@ -161,7 +172,6 @@ class Svg extends React.Component {
    ];
    let sampleColor = _.sample(tempColor);
    return sampleColor;
-   console.log(sampleColor);
   }
 
   setFood(color){
@@ -204,11 +214,12 @@ class Svg extends React.Component {
           food_eaten: ate,
           time_alive: this.state.currentPlayer.time_alive,
           speed: 0,
-          delay: this.playerDelay(delay, ate)[2]
+          delay: this.playerDelay(delay, ate)[2],
+          status: this.state.currentPlayer.status
         }
       });
       this.updatePlayer();
-      //this.updatePlayers();
+      this.updatePlayers();
       this.updateFood();
       this.updateGame();
     }, 100);
@@ -294,8 +305,8 @@ class Svg extends React.Component {
         }else{
           ate = ate + player.food_eaten;
         }
-        this.modelPlayer.destroy(player);
-        this.updatePlayers();
+        this.killPlayer(player);
+
       }else{
         tempPlayer.push(player);
       }
@@ -304,6 +315,14 @@ class Svg extends React.Component {
       players: tempPlayer
     });
     return ate;
+  }
+
+  killPlayer(player){
+    player.r = 0;
+    player.cx = 20;
+    player.cy = 20;
+    player.status = "dead";
+    this.modelPlayer.save(player, player);
   }
 
   eatFood(x, y){
@@ -329,7 +348,7 @@ class Svg extends React.Component {
           endXPlayer > endXFood &&
           endYPlayer > endYFood){
         ate = ate + 1;
-        this.loadNewPositionFood(food);
+        this.newPositionFood(food);
       }else{
         tempFoods.push(food);
       }
@@ -340,21 +359,23 @@ class Svg extends React.Component {
     return ate;
   }
 
-  updatePosition(x,y){
+  updatePosition(){
+    let lastPos = this.currentPlayerPositions.pop();
+    this.currentPlayerPositions = [lastPos];
     let tempPlayer = this.state.currentPlayer;
-    tempPlayer.nx = x - 200;
-    tempPlayer.ny = y;
+    tempPlayer.nx = lastPos.x - 200;
+    tempPlayer.ny = lastPos.y;
     this.setState({
       currentPlayer: tempPlayer
     });
   }
 
 
-  loadNewPositionFood(food){
+  newPositionFood(food){
     food.fill = this.randomColors();
-    food.cx = Math.floor(Math.random() * 990);;
-    food.cy = Math.floor(Math.random() * 640);;
-    this.modelFood.updateResource(food);
+    food.cx = Math.floor(Math.random() * 990);
+    food.cy = Math.floor(Math.random() * 640);
+    this.modelFood.save(food, food);
   }
 
   renderPlayer(player, index){
