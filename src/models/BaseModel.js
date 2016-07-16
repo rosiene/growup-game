@@ -43,7 +43,7 @@ class BaseModel {
   }
 
   updateResource(resource) {
-    this.resources = this.resources.map((current) => {
+    this.resources.data = this.resources.data.map((current) => {
       return resource._id === current._id ? resource : current;
     });
 
@@ -51,7 +51,7 @@ class BaseModel {
   }
 
   removeResource(resource) {
-    this.resources = this.resources.filter((current) => {
+    this.resources.data = this.resources.data.filter((current) => {
       return resource._id !== current._id;
     });
 
