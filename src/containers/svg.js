@@ -8,6 +8,7 @@ import SetPlayer from './set-player';
 import FoodModel from '../models/FoodModel';
 import PlayerModel from '../models/PlayerModel';
 import Colors from '../styles/colors';
+import HeaderBar from '../components/headerbar';
 
 class Svg extends React.Component {
 
@@ -36,7 +37,7 @@ class Svg extends React.Component {
       foods: [],
       players: [],
       game: false,
-      currentPlayer: {}
+      currentPlayer: {},
     };
 
     this.modelFood = new FoodModel();
@@ -206,7 +207,8 @@ class Svg extends React.Component {
           food_eaten: ate,
           time_alive: this.state.currentPlayer.time_alive,
           speed: 0,
-          delay: this.playerDelay(delay, ate)[2]
+          delay: this.playerDelay(delay, ate)[2],
+          ranking: this.state.currentPlayer.ranking
         }
       });
       this.updatePlayer();
@@ -386,7 +388,7 @@ class Svg extends React.Component {
   renderSvg(){
     return (
       <div>
-        <Header player={this.state.currentPlayer} />
+        <Header currentPlayer={this.state.currentPlayer} players={this.state.players} />
         <div style={this.style}>
           <svg id="board"  style={this.svgstyle} width="1000" height="650">
             { this.state.foods.map(this.renderFood) }
