@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import Utils from '../lib/Utils';
 import Player from './player';
 import Header from './header';
@@ -14,6 +15,7 @@ class Svg extends React.Component {
     super();
 
     this.utils = new Utils();
+    this.randomColors();
 
     this.style = {
       paddingTop: 40,
@@ -147,8 +149,23 @@ class Svg extends React.Component {
 
   createFoods(){
     for (let i = 0; i < 100; i++){
-      this.setFood("red");
+      this.setFood(this.randomColors());
     }
+  }
+
+  randomColors(){
+   var tempColor = [
+     "#ff1a1a",
+     "#3366ff",
+     "#33cc33",
+     "#ffff00",
+     "#ff0066",
+     "#ff471a",
+     "#cc0099"
+   ];
+   let sampleColor = _.sample(tempColor);
+   return sampleColor;
+   console.log(sampleColor);
   }
 
   setFood(color){
@@ -267,20 +284,20 @@ class Svg extends React.Component {
       let endXPlayer = parseInt(player.cx) + parseInt(player.r);
       let endYPlayer = parseInt(player.cy) + parseInt(player.r);
 
-      // if (startXPlayer < startXFood &&
-      //     startYPlayer < startYFood &&
-      //     endXPlayer > endXFood &&
-      //     endYPlayer > endYFood){
-      //   ate = ate + 1;
-      //   this.loadNewFood();
+      if (startXPlayer < startXFood &&
+          startYPlayer < startYFood &&
+          endXPlayer > endXFood &&
+          endYPlayer > endYFood){
+        ate = ate + 1;
+        this.loadNewFood();
 
-      // }else{
-      //   tempFoods.push(food);
-      // }
+      }else{
+        tempFoods.push(food);
+      }
     }
-    // this.setState({
-    //   foods: tempFoods
-    // });
+    this.setState({
+      foods: tempFoods
+    });
     return ate;
   }
 
@@ -297,7 +314,7 @@ class Svg extends React.Component {
   loadNewFood(){
     setTimeout(() => {
       let tempFoods = this.state.foods;
-      tempFoods.push(this.newFood("green"));
+      tempFoods.push(this.newFood(this.randomColors()));
 
       this.setState({
         foods: tempFoods
@@ -326,6 +343,7 @@ class Svg extends React.Component {
           <svg id="board"  style={this.svgstyle} width="1000" height="650">
             { this.state.foods.map(this.renderFood) }
             { this.state.players.map(this.renderPlayer) }
+            <circle r="50" cx="300" cy="200" fill="purple" />
           </svg>
         </div>
       </div>
