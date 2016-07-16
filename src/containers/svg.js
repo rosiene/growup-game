@@ -36,8 +36,7 @@ class Svg extends React.Component {
       foods: [],
       players: [],
       game: false,
-      currentPlayer: {},
-      currentPlayerDead: {}
+      currentPlayer: {}
     };
 
     this.modelFood = new FoodModel();
@@ -171,10 +170,10 @@ class Svg extends React.Component {
   }
 
   checkStatus(){
-    this.state.players.map((current) => {
+    this.modelPlayer.resources.map((current) => {
       if (this.state.currentPlayer._id === current._id){
         if (current.status === "dead"){
-          killPlayer(current);
+          this.killPlayer(current);
           alert("DEAD!!");
           window.location.reload();
         }
@@ -317,10 +316,6 @@ class Svg extends React.Component {
     player.cy = 0;
     player.status = "dead";
     this.modelPlayer.save(player, player);
-
-    this.setState({
-      currentPlayerDead: player
-    });
   }
 
   eatFood(x, y){
