@@ -55,12 +55,13 @@ class Svg extends React.Component {
   }
 
   updatePlayer(){
-    this.modelPlayer.updateResource(this.state.currentPlayer);
-    setTimeout(() => {
-      this.updatePlayers();
-    }, 10);
-    console.log(this.state.players.map(function(player,index){ return player.cx}));
-    console.log(this.modelPlayer.resources.data.map(function(player,index){ return player.cx}));
+    //this.modelPlayer.updateResource(this.state.currentPlayer);
+    let tempPlayer = this.state.players.map((player) => {
+      return this.state.currentPlayer._id === player._id ? this.state.currentPlayer : player;
+    });
+    this.setState({
+      players: tempPlayer
+    })
   }
 
   updatePlayers(){
@@ -89,16 +90,22 @@ class Svg extends React.Component {
       ranking: player.ranking
     });
 
+    alert(this.state.players);
+
     setTimeout(() => {
       this.updatePlayers();
       this.getCurrentPlayer();
 
       this.setState({
           game: true
-      });
+      },
+      alert(this.state.currentPlayer.name)
+    );
 
       this.startGame();
+
     }, 40)
+
   }
 
   newPlayer(name, fill){
@@ -122,7 +129,8 @@ class Svg extends React.Component {
 
   startGame() {
     this.updateFood();
-    if (this.state.foods) {
+
+    if (this.state.foods.length === 0) {
       this.createFoods();
     }
 
@@ -183,8 +191,8 @@ class Svg extends React.Component {
           delay: this.playerDelay(delay, ate)[2]
         }
       });
-      //this.updatePlayer();
-
+      this.updatePlayer();
+      this.updateFood();
       this.updateGame();
     }, 50);
   }
@@ -318,7 +326,6 @@ class Svg extends React.Component {
           <svg id="board"  style={this.svgstyle} width="1000" height="650">
             { this.state.foods.map(this.renderFood) }
             { this.state.players.map(this.renderPlayer) }
-            <Player cx={this.state.currentPlayer.cx} cy={this.state.currentPlayer.cy} r={this.state.currentPlayer.r} fill={this.state.currentPlayer.fill} />
           </svg>
         </div>
       </div>
