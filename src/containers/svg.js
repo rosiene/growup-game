@@ -329,12 +329,6 @@ class Svg extends React.Component {
     );
   }
 
-  newFood(color){
-  let x = Math.floor(Math.random() * 1090);
-  let y = Math.floor(Math.random() * 560);
-  return {cx: x, cy: y, r:"6", fill:color };
-}
-
   renderFood(food, index){
     return (
       <Food key={index} cx={food.cx} cy={food.cy} r={food.r} fill={food.fill} />
